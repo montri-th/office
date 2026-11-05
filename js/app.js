@@ -393,7 +393,7 @@ function renderMapAha(insight) {
   }
   if (rent) {
     const top = insight.areas[0];
-    el.innerHTML = `<div>${crumb}<h2>ค่าเช่ากลางสูงสุดใน${esc(home)}: ${esc(top.name)} <span class="nowrap">${esc(`฿${num(Math.round(top.value))}`)}</span></h2><p>${insight.areas.map(a => `${esc(a.name)} <span class="nowrap">฿${num(Math.round(a.value))}</span>`).join(' · ')} · <span class="nowrap">/ตร.ม./เดือน</span></p></div>${action}`;
+    el.innerHTML = `<div>${crumb}<h2>ค่าเช่ากลางสูงสุดใน${esc(home)}: ${esc(top.name)} <span class="nowrap">${esc(`฿${num(Math.round(top.value))}`)}</span> <span class="nowrap">· ${num(top.rentN)} ราคา</span></h2><p>${insight.areas.map(a => `${esc(a.name)} <span class="nowrap">฿${num(Math.round(a.value))} (${num(a.rentN)} ราคา)</span>`).join(' · ')} · <span class="nowrap">/ตร.ม./เดือน</span></p></div>${action}`;
     return;
   }
   el.innerHTML = `<div>${crumb}<h2><span class="nowrap">${pct(insight.value, insight.homeValue ?? insight.homePlacedValue)}</span> ของสำนักงานใน${esc(home)} อยู่ใน <span class="nowrap">${num(insight.areas.length)} ${esc(w)}นี้</span></h2><p>${names}</p></div>${action}`;
@@ -1166,7 +1166,7 @@ function areaLabelItems() {
   return ordered.map(a => ({id: a.id, name: a.name, value: rent ? `฿${num(Math.round(a.value))}` : num(a.value), state: a.state, quiet: focus.size > 0 && !focus.has(a.id),
     selected: a.id === state.selectedArea, center: navigating && state.labelView.has(a.id) ? state.labelView.get(a.id) : a.label, swatch: a.fill || '',
     title: rent ? `${areaWord(a.province)}${a.name} · ค่ากลางค่าเช่าที่ประกาศ ${num(Math.round(a.value))} ${u.one} · ${num(a.rentN)} ราคา · ${num(a.count)} แห่ง`
-      : `${areaWord(a.province)}${a.name} · ${num(a.value)} ${u.one}${a.rentN >= RENT_MIN_N ? ` · ค่าเช่ากลาง ${num(Math.round(a.rentMedian))} บาท/ตร.ม./เดือน` : ''}`}));
+      : `${areaWord(a.province)}${a.name} · ${num(a.value)} ${u.one}${a.rentN >= RENT_MIN_N ? ` · ค่าเช่ากลาง ${num(Math.round(a.rentMedian))} บาท/ตร.ม./เดือน · ${num(a.rentN)} ราคา` : ''}`}));
 }
 
 /**

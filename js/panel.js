@@ -79,9 +79,9 @@ const medianText = s => (s?.median != null ? `${baht(Math.round(s.median))}` : '
 
 /** Metric tile with a decorative pictogram; value may be a preformatted string. `detail` (numerator and denominator)
  *  is the tile's title and part of its accessible text. */
-export function metricTile(value, label, kind = '', detail = '') {
+export function metricTile(value, label, kind = '', detail = '', sub = '') {
   const shown = typeof value === 'string' ? value : num(value);
-  return `<div class="metric${kind ? ` metric-${kind}` : ''}"${detail ? ` title="${esc(detail)}"` : ''}>${pic(kind || 'plain', 'metric-symbol')}<strong class="data-number">${esc(shown)}</strong><span>${esc(label)}</span>${detail ? `<span class="sr-only">${esc(detail)}</span>` : ''}</div>`;
+  return `<div class="metric${kind ? ` metric-${kind}` : ''}"${detail ? ` title="${esc(detail)}"` : ''}>${pic(kind || 'plain', 'metric-symbol')}<strong class="data-number">${esc(shown)}</strong><span>${esc(label)}</span>${sub ? `<span class="metric-sub" aria-hidden="true">${esc(sub)}</span>` : ''}${detail ? `<span class="sr-only">${esc(detail)}</span>` : ''}</div>`;
 }
 export const heading = (kind, text, id = '') => `<h3${id ? ` id="${esc(id)}"` : ''}>${pic(kind)}${esc(text)}</h3>`;
 
@@ -99,7 +99,7 @@ const stationShort = s => (s ? `${s.name}${s.lines?.length ? ` (${s.lines.join('
 const stationName = s => (s ? `สถานี${stationShort(s)}` : '');
 /** The rent tile of a selection: its median from RENT_MIN_N dated rents, else the rents it has (“3 ราคา”), else “—”. */
 const rentTile = (s, place = '') => (s?.n >= RENT_MIN_N
-  ? metricTile(medianText(s), 'ค่าเช่ากลาง/ตร.ม.', 'price', `ค่ากลางของค่าเช่าเริ่มต้นที่ประกาศ ${num(s.n)} ราคา${place ? ` ใน${place}` : ''} บาทต่อตารางเมตรต่อเดือน`)
+  ? metricTile(medianText(s), 'ค่าเช่ากลาง/ตร.ม./เดือน', 'price', `ค่ากลางของค่าเช่าเริ่มต้นที่ประกาศ ${num(s.n)} ราคา${place ? ` ใน${place}` : ''} บาทต่อตารางเมตรต่อเดือน`, `${num(s.n)} ราคา`)
   : metricTile(s?.n || 0, 'ราคาประกาศ', 'price', s?.n ? `ราคาประกาศ ${num(s.n)} รายการ ค่ากลางใช้ ${RENT_MIN_N} รายการขึ้นไป` : 'ไม่มีราคาประกาศในชุดข้อมูล'));
 
 /* ---------- vocabularies (source details only) ---------- */
@@ -174,7 +174,7 @@ const floorsText = r => (r?.floors ? `${num(r.floors)} ชั้น` : '');
 function rowMeta(r, {showArea = false, index = null, distance = null} = {}) {
   const area = showArea && index && r.area ? index.byId.get(r.area) : null;
   const d = distance?.get?.(r.id);
-  return [floorsText(r), r.rent ? `${rentText(r.rent)}/ตร.ม.` : '', r.orgs[0]?.org.short || '',
+  return [floorsText(r), r.rent ? `${rentText(r.rent)}/ตร.ม./เดือน` : '', r.orgs[0]?.org.short || '',
     area ? placeName(area) : showArea && !r.area ? (r.province ? provinceName(r.province) : 'ไม่ระบุจังหวัด') : '',
     Number.isFinite(d) ? meters(d) : ''].filter(Boolean).join(' · ');
 }
@@ -203,7 +203,7 @@ function areaRanking(list, classOf, unit, {title, note = '', limit = 10, showPro
   return `<section class="panel-section" aria-labelledby="${esc(id)}">
     <div class="section-heading">${heading(rent ? 'price' : 'area', title, id)}<span class="hint">${esc(note)}</span></div>
     <ol class="rank-list">${top.map((a, i) => {
-      const other = rent ? `${num(a.rentN)} ราคา · ${num(a.count)} แห่ง` : a.rentN >= RENT_MIN_N ? `ค่าเช่ากลาง ${baht(Math.round(a.rentMedian))}` : '';
+      const other = rent ? `${num(a.rentN)} ราคา · ${num(a.count)} แห่ง` : a.rentN >= RENT_MIN_N ? `ค่าเช่ากลาง ${baht(Math.round(a.rentMedian))} (${num(a.rentN)} ราคา)` : '';
       const where = [showProvince ? provinceName(a.province) : '', rent ? '' : `${num(a.value)} ${unit.one}`, other].filter(Boolean).join(' · ');
       return `<li><button type="button" class="rank-row" data-action="select-area" data-id="${esc(a.id)}" aria-label="อันดับ ${i + 1} ${esc(placeName(a))} ${showProvince ? esc(provinceName(a.province)) : ''} ${esc(shown(a))} ${esc(unit.one)} ${esc(other)}">
         <span class="rank-index data-number" aria-hidden="true">${i + 1}</span>
@@ -512,7 +512,7 @@ function compsetSection(c) {
   if (!c) return '';
   const rule = [`${pic('price')}มีค่าเช่าที่ประกาศ`, `${pic('distance')}≤ ${esc(meters(c.radius))}`].map(t => `<span class="rule-chip">${t}</span>`).join('');
   const list = c.rows.length
-    ? `<ul class="outlet-list compset">${c.rows.map(({row: r, m}) => `<li><button type="button" class="brand-row" data-action="select-office" data-id="${esc(r.id)}">${cueMarkup(r.series, {className: 'row-cue'})}<span class="row-text"><strong>${esc(r.name)}</strong><span class="row-meta">${esc([meters(m), `${rentText(r.rent)} /ตร.ม.`, r.rent.on ? thaiDate(r.rent.on) : '', floorsText(r)].filter(Boolean).join(' · '))}</span></span></button></li>`).join('')}</ul>`
+    ? `<ul class="outlet-list compset">${c.rows.map(({row: r, m}) => `<li><button type="button" class="brand-row" data-action="select-office" data-id="${esc(r.id)}">${cueMarkup(r.series, {className: 'row-cue'})}<span class="row-text"><strong>${esc(r.name)}</strong><span class="row-meta">${esc([meters(m), `${rentText(r.rent)} /ตร.ม./เดือน`, r.rent.on ? thaiDate(r.rent.on) : '', floorsText(r)].filter(Boolean).join(' · '))}</span></span></button></li>`).join('')}</ul>`
     : '<p class="hint">ไม่พบค่าเช่าที่ประกาศในรัศมีนี้</p>';
   const around = c.around.rent.n >= RENT_MIN_N ? ` · ค่ากลาง ${nw(`<strong class="data-number">${baht(Math.round(c.around.rent.median))}</strong>`)} (${nw(`${num(c.around.rent.n)} ราคา`)})` : '';
   return `<section class="panel-section"><div class="section-heading">${heading('compare', 'ค่าเช่ารอบ ๆ')}<span class="hint">${num(c.matches)} แห่ง</span></div>

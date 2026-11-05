@@ -31,8 +31,8 @@ function areas(element, model, select, selectedId, unit, national) {
   const ramp = buildMetricRamp(model.values, {metric: model.metric, unit: unit.one});
   const rent = model.metric === 'rent';
   const max = Math.max(1, ...model.areas.map(a => a.value));
-  const other = a => (rent ? `${num(a.rentN)} ราคา · ${num(a.count)} แห่ง` : a.rentN >= RENT_MIN_N ? `ค่าเช่ากลาง ฿${num(a.rentMedian)}` : '');
-  const shown = a => (rent ? `฿${num(a.value)}` : num(a.value));
+  const other = a => (rent ? `${num(a.rentN)} ราคา · ${num(a.count)} แห่ง` : a.rentN >= RENT_MIN_N ? `ค่าเช่ากลาง ฿${num(Math.round(a.rentMedian))} (${num(a.rentN)} ราคา)` : '');
+  const shown = a => (rent ? `฿${num(Math.round(a.value))}` : num(a.value));
   const rows = model.areas.map((a, i) => {
     const cls = classify(a.value, ramp);
     const pressed = a.id === selectedId;
