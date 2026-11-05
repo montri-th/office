@@ -1,0 +1,23 @@
+{
+  "name": "citymeter-office",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "CityMETER · Office — district-first 3D map of office records across Thailand (organisation premises, rental offices and managed workspaces), with the median of listed starting asking rents per area, rail context from CityMETER Transit, organisations and a rent comparison set per office",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "start": "python3 -m http.server 4173 --bind 127.0.0.1",
+    "build:base": "python3 -I scripts/fetch-base.py --help",
+    "build:boundaries": "python3 -I scripts/build-boundaries.py --help",
+    "build:receipts": "python3 -I scripts/build-receipts.py --help",
+    "build:data": "python3 -I scripts/build-data.py --help",
+    "check:lds": "node scripts/check-lds-parity.mjs",
+    "handoff:manifest": "node scripts/build-handoff.mjs",
+    "handoff:bundle": "node scripts/build-handoff.mjs --zip dist/CityMETER-Office-Developer-Handoff.zip",
+    "verify:live": "node scripts/verify-live.mjs",
+    "build:units": "python3 -I scripts/build-building-units.py --help"
+  }
+}

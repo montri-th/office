@@ -1,0 +1,89 @@
+{
+ "release": "office-data-2026-11-05",
+ "sheet": {
+  "title": "CityMETER Office — Venue, Company & Building Research Master 2026-10-24",
+  "readOn": "2026-11-05",
+  "inputs": {
+   "01_OFFICES": {
+    "sha256": "c03e37f096b2869ba7be4c0114018866916ec2529db45d09c9c4e6f474b4217d",
+    "rows": 612
+   },
+   "15_PROJECTS": {
+    "sha256": "68eecedb453cc6f2e578d44b42875a9217219b3ff24a9b3a86d4bd247bb46dad",
+    "rows": 76
+   },
+   "18_ORGANIZATIONS": {
+    "sha256": "a12bd40ccbd7387c832fa1f462de2cf121b4daa72576abf117ac21b83add9eaf",
+    "rows": 80
+   },
+   "19_ORGANIZATION_ROLES": {
+    "sha256": "a27e70c0d4a98d52237b6f5ef464ee40fc367083131eb6420d75179d7eb8eca6",
+    "rows": 582
+   },
+   "23_OFFICE_ALIASES": {
+    "sha256": "f6d84bd541b2f2be94a62746b2b334d0678c07323fd8227a7b2a0e6e3b7b16a2",
+    "rows": 1068
+   },
+   "28_OFFICE_METRICS": {
+    "sha256": "eadadd3114185536770ec8f6567bfa02fa0865b6327073199530b100cd021dd6",
+    "rows": 612
+   }
+  }
+ },
+ "counts": {
+  "admin.name": 543,
+  "admin.point": 45,
+  "admin.province": 20,
+  "area.known": 346,
+  "evidence.confirmed": 293,
+  "evidence.legacy": 312,
+  "evidence.review": 3,
+  "excluded.aggregate": 4,
+  "floors.known": 360,
+  "group.hybrid": 3,
+  "group.organization": 168,
+  "group.rental": 216,
+  "group.unresolved": 162,
+  "group.workspace": 59,
+  "link.none": 135,
+  "link.public": 473,
+  "orgs.rows": 331,
+  "points": 427,
+  "rent.legacyOnly": 72,
+  "rent.monthly": 276,
+  "rent.monthly.noPublicLink": 0,
+  "rent.monthly.undated": 20,
+  "rows": 608
+ },
+ "excluded": [
+  "OFF-596113F3904D",
+  "OFF-B29FE5621107",
+  "OFF-D01C1EA23E29",
+  "OFF-D442F0073D68"
+ ],
+ "checks": {
+  "namePointDisagree": 0,
+  "namePointDisagreeSample": [],
+  "coordinateBases": {
+   "จุดจาก CityMETER production (รวมการแก้ไขในชีต)": 333,
+   "จุดจากแหล่งข้อมูล": 1,
+   "จุดแผนที่ที่องค์กรหรือผู้ดำเนินการเผยแพร่": 11,
+   "จุดตามที่แหล่งเผยแพร่": 45,
+   "จุดบนแผนที่ของแหล่งที่ระบุชื่อสำนักงาน (ตรวจข้ามแหล่ง)": 16,
+   "พิกัดที่หน้าทางการระบุ": 3,
+   "จุดตัวแทนภายในรูปอาคาร OpenStreetMap ที่ชื่อตรงกัน": 9,
+   "จุดของสถานที่ที่เจ้าของหรือผู้ใช้อ้างถึง": 9
+  }
+ },
+ "conflicts": 0,
+ "stations": 215,
+ "organisations": 77,
+ "projects": 44,
+ "files": [
+  {
+   "path": "data/offices.json",
+   "bytes": 257709,
+   "sha256": "1ffb1bc072cd5f814508b7963fbe1cbaaecb36a591be1f09d08429a8bb346ea4"
+  }
+ ]
+}

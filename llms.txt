@@ -1,0 +1,26 @@
+# CityMETER · Office
+
+> Office records across Thailand by district (เขต/อำเภอ): organisations' own office premises, rental office buildings and components, and managed-workspace centres, with the median of the starting asking rents that public listings show (THB per m² per month), straight-line distance to rail stations (CityMETER Transit), the organisations the research sheet links to each office and a rent comparison set per office. A Landometer CityMETER public demo, release 0.1.0 (2026-11-05). Research master checked 2026-11-02.
+
+What one figure means:
+- offices (แห่ง) = Office IDs of the research master's 01_OFFICES: an office premises, building or component. A workspace centre inside a host building is its own record, and an Office ID can be a few floors of a building, so a count of offices is never a count of buildings or of floor area. Not a census; the register has no national denominator.
+- rent = the starting asking rent a public listing shows (28_OFFICE_METRICS.rent_min_thb_sqm_month), THB per m² per month, with its listing month (May–October 2026). Not a contract, achieved or average rent; VAT and service-charge inclusion is mostly not verified.
+- median rent of an area = the median of the dated asking rents of its offices, only from 5 of them; with fewer the area shows how many rents it has, never a median.
+- recorded price (เดิม) = the legacy CityMETER production price (THB per m², period not stated), shown per office only where no monthly rent is selected; never in a measure.
+- floors, area = the building's storeys and the source area with their status and basis (GLA/GFA often unstated).
+- organisations = roles of 19_ORGANIZATION_ROLES (office user, operator, workspace provider or network, leasing brand, published portfolio, property manager, rental provider), source claims — not a verified tenancy, ownership or occupancy.
+- distances = straight lines between reference points, not walking routes or catchments.
+- districts = CityMETER production districts (codes as in https://landometer.com/v3/citymeter/{province}/D/{district}?d=office).
+
+Links:
+- Live demo: https://montri-th.github.io/office/
+- Source: https://github.com/montri-th/office
+- Method and limits: https://montri-th.github.io/office/DATA_METHOD.md
+- Product statement: https://montri-th.github.io/office/PRODUCT_STATEMENT.md
+- Developer handoff: https://github.com/montri-th/office/tree/main/handoff
+- CityMETER production (office dataset): https://landometer.com/v3/citymeter?d=office
+- Rail context: https://montri-th.github.io/transit/
+
+Deep links: ?area={district code} · ?province={code} · ?office={Office ID} · ?station={station id} · ?metric=rent · ?view=areas|mix|orgs · ?areas=all
+
+Attribution: CityMETER (Landometer); OpenStreetMap contributors (ODbL) for buildings and the basemap via OpenMapTiles/OpenFreeMap; CityMETER Building V4 where drawn; SRTM terrain via Terrain Tiles on AWS where drawn.

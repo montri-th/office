@@ -1,0 +1,320 @@
+{
+  "$schema": "./handoff.schema.json",
+  "schemaVersion": "1.5.0",
+  "documentType": "product-statement",
+  "productId": "citymeter-office",
+  "productVersion": "0.1.0",
+  "updatedOn": "2026-11-05",
+  "dataset_id": "research.TH.office",
+  "productionDatasetCode": "office",
+  "language": "th",
+  "liveUrl": "https://montri-th.github.io/office/",
+  "markdown": "PRODUCT_STATEMENT.md",
+  "positioning": {
+    "one_line_highlight": "แผนที่ 3 มิติของสำนักงานทั่วไทย ที่บอกว่าสำนักงานกระจุกตรงไหน ค่าเช่าที่ประกาศเท่าไร และใกล้รถไฟฟ้าแค่ไหน พร้อมแหล่งของทุกตัวเลข",
+    "question": "สำนักงานกระจุกอยู่ตรงไหน ค่าเช่าที่ประกาศเท่าไร และใกล้รถไฟฟ้าแค่ไหน",
+    "unique_advantage": "รวมสำนักงานให้เช่า พื้นที่ทำงานแบบบริการ และสำนักงานขององค์กรไว้บนเขต/อำเภอของ CityMETER production พร้อมค่ากลางของค่าเช่าเริ่มต้นที่ประกาศต่อพื้นที่ (บอกจำนวนราคาเสมอ) บริบทสถานีรถไฟฟ้าจาก CityMETER Transit องค์กรที่ผูกกับสำนักงาน และค่าเช่ารอบ ๆ รายสำนักงาน",
+    "unique_vs_competitors": "เว็บประกาศของนายหน้าตอบทีละอาคาร รายงานที่ปรึกษาสรุปเป็นย่านกว้าง Google Maps ไม่บอกค่าเช่า และชั้นข้อมูล office เดิมของ production ไม่มีรอบเวลาของราคา — Office รวมสำนักงาน × เขต/อำเภอ × ค่าเช่าที่ประกาศ × รถไฟฟ้า × องค์กร ที่ตรวจย้อนได้ทุกแถว"
+  },
+  "users": {
+    "primary_users": [
+      "ทีมอสังหาริมทรัพย์ขององค์กรและผู้เช่าสำนักงาน",
+      "เจ้าของอาคาร ผู้พัฒนา และนักลงทุนอสังหาริมทรัพย์",
+      "ผู้ให้บริการพื้นที่ทำงานและนายหน้า",
+      "ทีมวิเคราะห์ ที่ปรึกษา และ agent"
+    ],
+    "functional_needs": [
+      "เห็นว่าสำนักงานและอาคารสำนักงานให้เช่ากระจุกที่เขต/อำเภอใด",
+      "ค่ากลางของค่าเช่าเริ่มต้นที่ประกาศต่อพื้นที่ พร้อมจำนวนราคา",
+      "ระยะตรงถึงสถานีรถไฟฟ้าที่เปิดแล้ว",
+      "ค่าเช่าที่ประกาศของสำนักงานในรัศมี 1 กม. รอบแปลงหรืออาคาร",
+      "องค์กรหรือผู้ให้บริการพื้นที่ทำงานที่ผูกกับแต่ละสำนักงาน",
+      "ลิงก์ตรงที่อ้างอิงได้ทุกตัวเลข (?area= ?office= ?metric=rent)"
+    ],
+    "emotional_needs": [
+      "ไม่เลือกย่านจากข้อมูลของนายหน้ารายเดียว",
+      "อธิบายต่อผู้บริหารได้ด้วยหลักฐาน",
+      "รู้ว่าราคาที่ตั้งไว้อยู่ตรงไหนของราคาประกาศรอบตัว"
+    ],
+    "trigger_voice_in_head": [
+      "ย่านไหนค่าเช่าเท่านี้แล้วยังใกล้รถไฟฟ้า",
+      "เราเทียบกับตลาดครบหรือยัง",
+      "อาคารรอบที่ดินเราประกาศค่าเช่าเท่าไร"
+    ],
+    "value_proposition": "ตอบ “ย่านไหน สำนักงานเท่าไร ค่าเช่าที่ประกาศเท่าไร ใกล้รถไฟฟ้าแค่ไหน” ในหนึ่งหน้าจอ พร้อมแหล่งของทุกตัวเลข",
+    "evidence": "Hypothesis — กลุ่มผู้ใช้จาก Product Brief CityMETER v6 (ธุรกิจและนักลงทุน ทีมวิเคราะห์ Search/LLM/Agent); การแบ่งกลุ่มย่อยเป็นข้อเสนอของ PRODUCT_STATEMENT.md ยังไม่ได้ทดสอบกับผู้ใช้"
+  },
+  "problem": {
+    "statement": "ข้อมูลสำนักงานกระจายอยู่หลายแหล่ง — หน้าประกาศของนายหน้า พอร์ตของเจ้าของอาคาร รายชื่อสำนักงานของหน่วยงาน — แต่ละแหล่งมีขอบเขตของตัวเอง ราคาไม่บอกเดือน หน่วย หรือว่ารวมค่าบริการหรือไม่ และไม่มีแหล่งใดวางบนขอบเขตปกครองเดียวกับข้อมูลเมืองอื่น (Inference)",
+    "urgency": "การเลือกหรือย้ายสำนักงานผูกสัญญาเช่าหลายปี การเทียบย่านต้องทำก่อนคุยกับนายหน้า (Inference)",
+    "severity": "ย่านที่เลือกกำหนดค่าเช่าและการเดินทางของพนักงานตลอดอายุสัญญา (Inference)"
+  },
+  "competitor_landscape": {
+    "present_competitors": [
+      {
+        "name": "เว็บประกาศสำนักงานให้เช่าของนายหน้า (เช่น officebangkok.com แหล่งของ 255 จาก 256 ราคาที่มีเดือนในชุดนี้)",
+        "how_users_use_it": "หาอาคารและราคาเริ่มต้นรายอาคาร",
+        "strength": "ข้อมูลรายอาคารละเอียด อัปเดตตามประกาศ",
+        "gap": "ไม่รวมเป็นภาพรายพื้นที่ ไม่บอกค่ากลางหรือจำนวนราคา ไม่มีสำนักงานขององค์กรที่ไม่ได้ให้เช่า"
+      },
+      {
+        "name": "รายงานตลาดของบริษัทที่ปรึกษาอสังหาริมทรัพย์",
+        "how_users_use_it": "ดูค่าเช่าเฉลี่ยและอัตราการเช่าระดับตลาด",
+        "strength": "วิธีการของผู้เชี่ยวชาญ ต่อเนื่องหลายปี",
+        "gap": "สรุปเป็นย่านกว้าง ไม่ลงถึงเขต/อำเภอและอาคารบนแผนที่เดียวกับข้อมูลเมืองอื่น (Inference จากรูปแบบรายงานทั่วไป)"
+      },
+      {
+        "name": "Google Maps",
+        "how_users_use_it": "หาที่ตั้งและเส้นทาง",
+        "strength": "ครอบคลุม ค้นง่าย",
+        "gap": "ไม่บอกค่าเช่า ไม่แยกรูปแบบสำนักงาน ไม่นับต่อพื้นที่"
+      },
+      {
+        "name": "ชั้นข้อมูล office ของ CityMETER production",
+        "how_users_use_it": "ดูอาคารสำนักงานเดิมบนแผนที่",
+        "strength": "อยู่ในระบบจริง ต่อกับชุดข้อมูลเมืองอื่น",
+        "gap": "ราคาเดิมไม่ระบุรอบเวลา ไม่มีสำนักงานขององค์กร ไม่มีองค์กรหรือที่มาของแต่ละรายการ"
+      }
+    ],
+    "aspirational_competitors": [
+      "ฐานข้อมูลอสังหาริมทรัพย์เชิงพาณิชย์ที่มีอาคาร ค่าเช่า และผู้เช่ารายอาคารบนแผนที่",
+      "แผนที่ค้นสถานที่ระดับโลก"
+    ],
+    "expected_quality_bar": "ทุกตัวเลขมีชุดข้อมูล แหล่ง วันที่ ขอบเขต · ค่าเช่าทุกค่ามีเดือนหรือแสดงรายสำนักงานเท่านั้น · ค่ากลางบอกจำนวนราคา · ค่าที่ไม่มีไม่แสดงเป็น 0 (Hypothesis)"
+  },
+  "winning_strategy": [
+    "ภาพรายพื้นที่ที่เทียบได้: ค่ากลางค่าเช่าที่ประกาศพร้อมจำนวนราคา บนเขต/อำเภอเดียวกับ CityMETER production และลิงก์ ?d=office",
+    "ครบทั้งสำนักงานให้เช่า พื้นที่ทำงานแบบบริการ และสำนักงานขององค์กร (เช่น สำนักงานสรรพากรพื้นที่ทั้ง 77 จังหวัด)",
+    "ลงถึงอาคาร: มุมมองอาคาร 3 มิติ ค่าเช่ารอบ ๆ ในรัศมี 1 กม. และองค์กรที่ผูกกับสำนักงาน",
+    "ข้ามชุดข้อมูลในทะเบียนเดียวกัน: CityMETER Transit ผูกด้วย id พร้อม commit/sha256",
+    "ความจริงก่อนความสวย: ค่าเช่าที่ประกาศ ≠ ค่าเช่าตามสัญญา · ไม่ถึง 5 ราคาไม่มีค่ากลาง · ระยะตรง · บรรทัดที่มาทุกมุมมองพร้อมลิงก์วิธีนับ · ไม่มีคำเตือนบนหน้าจอ (กติกาเจ้าของจาก Hotel)"
+  ],
+  "firstFinding": {
+    "evidence": "Observed fact (release 0.1.0 data, no filter)",
+    "count": {
+      "home": "BKK",
+      "areas": [
+        {
+          "id": "1004",
+          "name": "บางรัก",
+          "value": 63
+        },
+        {
+          "id": "1017",
+          "name": "ห้วยขวาง",
+          "value": 47
+        },
+        {
+          "id": "1039",
+          "name": "วัฒนา",
+          "value": 46
+        },
+        {
+          "id": "1007",
+          "name": "ปทุมวัน",
+          "value": 46
+        }
+      ],
+      "value": 202,
+      "homePlacedValue": 413,
+      "homeValue": 429,
+      "sharePct": 47,
+      "rail": {
+        "m": 500,
+        "focus": {
+          "within": 136,
+          "base": 191,
+          "noPoint": 11
+        },
+        "rest": {
+          "within": 93,
+          "base": 175,
+          "noPoint": 36
+        }
+      },
+      "outside": {
+        "id": "5001",
+        "name": "เมืองเชียงใหม่",
+        "province": "CMI",
+        "value": 15
+      }
+    },
+    "rent": {
+      "home": "BKK",
+      "areas": [
+        {
+          "id": "1007",
+          "name": "ปทุมวัน",
+          "median": 982.5,
+          "n": 26
+        },
+        {
+          "id": "1033",
+          "name": "คลองเตย",
+          "median": 712.5,
+          "n": 24
+        },
+        {
+          "id": "1039",
+          "name": "วัฒนา",
+          "median": 665,
+          "n": 29
+        }
+      ],
+      "province": {
+        "median": 610,
+        "n": 250
+      },
+      "national": {
+        "median": 600,
+        "n": 256
+      },
+      "rail": {
+        "m": 500,
+        "near": {
+          "median": 742.5,
+          "n": 166
+        },
+        "far": {
+          "median": 500,
+          "n": 80
+        }
+      },
+      "outside": {
+        "id": "1103",
+        "name": "บางพลี",
+        "province": "SPK",
+        "median": 550,
+        "n": 5
+      },
+      "districtsWithMedian": 14,
+      "districtsWithRents": 22
+    }
+  },
+  "data_transparency": {
+    "unit": {
+      "row": "one Office ID of 01_OFFICES — an office record (an organisation’s office premises, a rental office building or component, or a managed-workspace centre in a host building); a record can be a few floors of a building, so a count of rows is never a count of buildings; not a census",
+      "rent": "rent_min_thb_sqm_month of 28_OFFICE_METRICS — the starting asking rent a public listing shows (THB per m² per month), with its page, month and basis; VAT and service-charge inclusion mostly not verified; never a contract or achieved rent",
+      "legacyPrice": "legacy_rent_min/max of CityMETER production (THB per m²; period not stated): shown per office only when no monthly figure is selected; never in a measure",
+      "floors": "floors of 28_OFFICE_METRICS — storeys of the building the record sits in, with status (a legacy value keeps its unverified scope)"
+    },
+    "sources": [
+      "CityMETER Office (ชุดข้อมูลสำนักงานของ CityMETER production)",
+      "หน้าทางการขององค์กรหรืออาคาร (รอบขยายจากแหล่งหลัก)",
+      "หน้าทางการของสำนักงานเอกชนในภูมิภาค",
+      "หน้าทางการของสำนักงานเอกชนในภูมิภาค (รอบตรวจที่อยู่)",
+      "หน้าทางการของสำนักงานเอกชนในภูมิภาค (รอบตรวจตำแหน่ง)",
+      "พอร์ตที่เจ้าของอาคารหรือผู้ให้บริการพื้นที่ทำงานเผยแพร่",
+      "พอร์ตอาคารที่นายหน้าเผยแพร่ ตรวจชื่อ ที่อยู่ และพิกัดกับแหล่งหลัก"
+    ],
+    "rentSources": {
+      "dated": {
+        "www.officebangkok.com": 255,
+        "www.ddproperty.com": 1
+      },
+      "undated": {
+        "property.cbre.co.th": 12,
+        "www.irentoffice.com": 7,
+        "thelist.group": 1
+      }
+    },
+    "inputs": {
+      "01_OFFICES": {
+        "sha256": "c03e37f096b2869ba7be4c0114018866916ec2529db45d09c9c4e6f474b4217d",
+        "rows": 612
+      },
+      "15_PROJECTS": {
+        "sha256": "68eecedb453cc6f2e578d44b42875a9217219b3ff24a9b3a86d4bd247bb46dad",
+        "rows": 76
+      },
+      "18_ORGANIZATIONS": {
+        "sha256": "a12bd40ccbd7387c832fa1f462de2cf121b4daa72576abf117ac21b83add9eaf",
+        "rows": 80
+      },
+      "19_ORGANIZATION_ROLES": {
+        "sha256": "a27e70c0d4a98d52237b6f5ef464ee40fc367083131eb6420d75179d7eb8eca6",
+        "rows": 582
+      },
+      "23_OFFICE_ALIASES": {
+        "sha256": "f6d84bd541b2f2be94a62746b2b334d0678c07323fd8227a7b2a0e6e3b7b16a2",
+        "rows": 1068
+      },
+      "28_OFFICE_METRICS": {
+        "sha256": "eadadd3114185536770ec8f6567bfa02fa0865b6327073199530b100cd021dd6",
+        "rows": 612
+      }
+    },
+    "readOn": "2026-11-05",
+    "checkedOn": "2026-11-02",
+    "rentMonths": [
+      "2026-05",
+      "2026-06",
+      "2026-07",
+      "2026-08",
+      "2026-09",
+      "2026-10"
+    ],
+    "method": "DATA_METHOD.md"
+  },
+  "known_limitations": [
+    "Office records come from CityMETER production (legacy, not re-verified), official pages of organisations and buildings, operator portfolios and broker portfolios checked against primary pages; the register is not a census and has no national denominator.",
+    "A record is an office premises, building or component; workspace centres inside a host building are separate records. A count of records is not a count of buildings or of floor area.",
+    "Rents are starting asking rents of public listings (THB/m²/month) with their month; VAT and service charges mostly unverified; not contract, achieved or average rents.",
+    "Floors and areas carry their own status; GLA/GFA is often unstated; legacy values keep an unverified scope.",
+    "Organisation roles are source claims; an organisation named with an office is not a verified current tenant or owner.",
+    "Distances to rail stations are straight-line distances between reference points.",
+    "255 of the 256 dated rents come from one broker site (officebangkok.com); every median reads that site’s displayed starting rents in practice.",
+    "312 rows are legacy CityMETER production records not yet re-verified; 181 rows have no point and are drawn nowhere (they stay in every total).",
+    "The research master does not yet clear the public use of its upstream sources; the demo is published on the owner’s request of 2026-11-05."
+  ],
+  "claimBoundary": {
+    "canSay": [
+      "สำนักงานในชุดข้อมูลกระจุกที่ใด (แห่ง)",
+      "ค่ากลางของค่าเช่าเริ่มต้นที่ประกาศ พร้อมจำนวนราคาและเดือน",
+      "ระยะตรงถึงสถานีรถไฟฟ้า",
+      "องค์กรที่แหล่งระบุกับสำนักงาน พร้อมบทบาท",
+      "จำนวนชั้นและพื้นที่ตามแหล่ง พร้อมสถานะ"
+    ],
+    "cannotSay": [
+      "ค่าเช่าตามสัญญาหรือค่าเช่าที่ตกลงจริง",
+      "ค่าเช่าเฉลี่ยของตลาด",
+      "อัตราว่างหรืออัตราการเช่าของตลาด",
+      "อุปทานพื้นที่สำนักงาน (ตร.ม.) ทั้งตลาด",
+      "จำนวนอาคาร",
+      "ส่วนแบ่งตลาด",
+      "ความต้องการ",
+      "รายได้",
+      "ความหนาแน่น",
+      "ผู้เช่าหรือเจ้าของปัจจุบันที่ยืนยันแล้ว",
+      "รวม VAT/ค่าบริการหรือไม่ (ส่วนใหญ่)",
+      "ระยะเดินหรือเวลาเดินทาง"
+    ]
+  },
+  "hypotheses_to_validate": [
+    {
+      "hypothesis": "ทีมอสังหาริมทรัพย์ขององค์กรใช้ค่ากลางค่าเช่ารายเขตเพื่อทำ shortlist ย่านได้เร็วขึ้น",
+      "test": "สัมภาษณ์และให้ทำ shortlist 3 ย่านด้วยเดโมเทียบกับวิธีเดิม",
+      "criterion": "ผู้ใช้ 3 ใน 5 ทำ shortlist ได้ภายใน 10 นาทีและอธิบายเหตุผลด้วยตัวเลขในหน้าได้"
+    },
+    {
+      "hypothesis": "เจ้าของอาคารใช้ “ค่าเช่ารอบ ๆ” เทียบราคาที่ตั้งไว้",
+      "test": "ทดลองกับเจ้าของหรือผู้จัดการอาคาร 3 ราย",
+      "criterion": "2 ใน 3 บอกว่าชุดเทียบตรงกับคู่แข่งที่เขารู้จัก"
+    },
+    {
+      "hypothesis": "การแยกสำนักงานขององค์กรออกจากสำนักงานให้เช่าช่วยการตัดสินใจ",
+      "test": "ถามผู้ใช้ว่ามุมมองใดใช้จริง",
+      "criterion": "มีผู้ใช้ระบุการใช้งานสำนักงานขององค์กรอย่างน้อยหนึ่งกรณี"
+    },
+    {
+      "hypothesis": "ราคาประกาศใกล้รถไฟฟ้าสูงกว่าเพราะทำเลรถไฟฟ้า ไม่ใช่เพราะย่าน",
+      "test": "เทียบภายในเขตเดียวกัน หรือคุมระดับอาคารเมื่อมีข้อมูลพอ",
+      "criterion": "ส่วนต่างยังอยู่เมื่อเทียบภายในเขตเดียวกันอย่างน้อย 3 เขต"
+    },
+    {
+      "hypothesis": "ค่ากลางจากเว็บประกาศรายเดียวใกล้กับค่ากลางจากแหล่งที่สอง",
+      "test": "อ่านราคาประกาศของอาคารเดียวกันจากแหล่งที่สอง (หน้าเจ้าของหรือนายหน้าอื่น) 50 อาคาร",
+      "criterion": "ค่ากลางรายเขตต่างกันไม่เกิน 10% ใน 5 เขตที่มีราคามากที่สุด"
+    }
+  ]
+}

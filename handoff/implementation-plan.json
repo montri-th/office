@@ -1,0 +1,424 @@
+{
+  "$schema": "./handoff.schema.json",
+  "schemaVersion": "1.5.0",
+  "documentType": "implementation-plan",
+  "productId": "citymeter-office",
+  "productVersion": "0.1.0",
+  "updatedOn": "2026-11-05",
+  "architecture": {
+    "runtime": "static site (GitHub Pages), ES modules with an import map, no build step; Node ≥ 20 for tests, Python 3 for data builds",
+    "commands": {
+      "test": "node --test tests/*.test.js",
+      "start": "python3 -m http.server 4173 --bind 127.0.0.1",
+      "build:base": "python3 -I scripts/fetch-base.py --help",
+      "build:boundaries": "python3 -I scripts/build-boundaries.py --help",
+      "build:receipts": "python3 -I scripts/build-receipts.py --help",
+      "build:data": "python3 -I scripts/build-data.py --help",
+      "check:lds": "node scripts/check-lds-parity.mjs",
+      "handoff:manifest": "node scripts/build-handoff.mjs",
+      "handoff:bundle": "node scripts/build-handoff.mjs --zip dist/CityMETER-Office-Developer-Handoff.zip",
+      "verify:live": "node scripts/verify-live.mjs",
+      "build:units": "python3 -I scripts/build-building-units.py --help"
+    },
+    "libraries": {
+      "maplibre": "MapLibre GL JS 5.6.2 (unpkg, pinned; js/maplibre-guard.js)",
+      "earcut": "js/vendor/earcut.js (ISC)",
+      "tiles": "OpenFreeMap planet (OpenMapTiles schema)"
+    },
+    "modules": {
+      "js/app.js": "state, row scopes, panel modes, URL, camera, map clicks (selectOffice, filterOrg, setMetric)",
+      "js/model.js": "decode data/offices.json, measures (count | rent, RENT_MIN_N), filters, summaries, production/Transit links",
+      "js/areas.js": "",
+      "js/area-insight.js": "first Aha for both measures (tie rule, N − 1, rail bars or rail medians, outside finding)",
+      "js/profile-model.js": "panel models: overview, area, station, building, office (compsetOf), organisation",
+      "js/panel.js": "HTML of every panel mode + the provenance line",
+      "js/charts.js": "areas / mix / orgs views",
+      "js/chart-model.js": "chart models (areas by measure, district × category matrix, organisation ranking)",
+      "js/map-layers.js": "",
+      "js/provinces.js": "province frames, measure fill below zoom 8, rent no_data hatch",
+      "js/frames.js": "",
+      "js/scales.js": "LDS count + price 41-sample LUTs, rank ramps, EVID-05 classes",
+      "js/cues.js": "category → LDS series + shape cue",
+      "js/pins.js": "office symbols (one size), HTML pins with roving focus",
+      "js/stations.js": "rail stations and the 500 m radius",
+      "js/ask.js": "",
+      "js/breadcrumb.js": "",
+      "js/building-join.js": "",
+      "js/massing.js": "city and focus massing tiers; CityMETER Building V4 inside CityMETER units (shapeCmTile, planCmRequests), OSM parts override, context layer, credit",
+      "js/camera.js": "presets, pitched fits and the building camera (terrain-aware: groundAt, projectAltitude)",
+      "js/venue-xray.js": "",
+      "js/map-style.js": "",
+      "js/maplibre-guard.js": "",
+      "js/mvt.js": "",
+      "js/geometry.js": "",
+      "js/navigation.js": "",
+      "js/vendors.js": "",
+      "js/launch.js": "",
+      "js/labels.js": "names near the middle of the view (importance = floors + asking-rent percentiles), hover card of icon chips",
+      "js/terrain.js": "terrain mode at hilly sites and round a building or office being looked at",
+      "js/building-units.js": "buildings per area: the per-province unit files of Hotel 0.3.6 (data/building-units/), CityMETER zones, production tile URLs and the attribution"
+    },
+    "data": [
+      "data/offices.json",
+      "data/area-index.json",
+      "data/frames/{CODE}.json",
+      "data/provinces.geojson",
+      "data/boundary-receipts.json",
+      "data/building-units/",
+      "data/build-report.json"
+    ]
+  },
+  "selection": {
+    "filterFields": [
+      "search",
+      "group",
+      "ev",
+      "size",
+      "province",
+      "org"
+    ],
+    "queryFields": [
+      "metric",
+      "area",
+      "areas",
+      "view",
+      "office",
+      "station",
+      "view3d"
+    ],
+    "rowScopes": {
+      "scopeRows": "rows after search · category · evidence · floors · province · organisation, before any district selection or focus: the comparison base of the Aha, the choropleth, the charts and every rank",
+      "baseRows": "scopeRows narrowed by the selected เขต/อำเภอ",
+      "rows": "baseRows narrowed by the district focus: pins with detail, counters, the table (a building, station or organisation panel shows its own rows)"
+    },
+    "panelActions": [
+      "select-area",
+      "select-office",
+      "select-building",
+      "select-station",
+      "select-province",
+      "filter-org",
+      "filter-group",
+      "filter-ev",
+      "set-metric",
+      "back",
+      "explore-top",
+      "clear-focus",
+      "open-charts",
+      "open-table",
+      "clear-filter",
+      "leave-area"
+    ]
+  },
+  "tasks": [
+    {
+      "id": "T1",
+      "title": "Data build from the research master (6 tabs) + production base info + Transit",
+      "dependsOn": [],
+      "acceptanceCriteria": [
+        "A1",
+        "A2",
+        "A12"
+      ],
+      "files": [
+        "scripts/build-data.py",
+        "data/offices.json",
+        "data/build-report.json"
+      ],
+      "status": "done"
+    },
+    {
+      "id": "T2",
+      "title": "Measure contract (offices | median dated asking rent), count + price ramps, EVID-05 states",
+      "dependsOn": [
+        "T1"
+      ],
+      "acceptanceCriteria": [
+        "A3",
+        "A4"
+      ],
+      "files": [
+        "js/model.js",
+        "js/scales.js",
+        "js/map-layers.js",
+        "js/provinces.js"
+      ],
+      "status": "done"
+    },
+    {
+      "id": "T3",
+      "title": "First Aha for both measures (tie rule, rail bars / medians, outside finding)",
+      "dependsOn": [
+        "T2"
+      ],
+      "acceptanceCriteria": [
+        "A5",
+        "A10",
+        "A11"
+      ],
+      "files": [
+        "js/area-insight.js",
+        "js/panel.js"
+      ],
+      "status": "done"
+    },
+    {
+      "id": "T4",
+      "title": "Office, station, organisation and building panels; ค่าเช่ารอบ ๆ",
+      "dependsOn": [
+        "T1"
+      ],
+      "acceptanceCriteria": [
+        "A6",
+        "A7",
+        "A15"
+      ],
+      "files": [
+        "js/profile-model.js",
+        "js/panel.js",
+        "js/stations.js"
+      ],
+      "status": "done"
+    },
+    {
+      "id": "T5",
+      "title": "Charts (areas, mix, orgs), table, Google actions, pictograms, labels",
+      "dependsOn": [
+        "T2"
+      ],
+      "acceptanceCriteria": [
+        "A8"
+      ],
+      "files": [
+        "js/charts.js",
+        "js/chart-model.js",
+        "js/ask.js",
+        "js/labels.js",
+        "js/navigation.js"
+      ],
+      "status": "done"
+    },
+    {
+      "id": "T6",
+      "title": "Building view, massing, terrain, MapLibre guards (carried from Hotel 0.3.6)",
+      "dependsOn": [],
+      "acceptanceCriteria": [
+        "A13"
+      ],
+      "files": [
+        "js/camera.js",
+        "js/massing.js",
+        "js/venue-xray.js",
+        "js/building-join.js",
+        "js/maplibre-guard.js",
+        "js/terrain.js"
+      ],
+      "status": "done"
+    },
+    {
+      "id": "T7",
+      "title": "Documents: README, DATA_METHOD, PRODUCT_STATEMENT, AGENTS, llms.txt, handoff",
+      "dependsOn": [
+        "T1",
+        "T3"
+      ],
+      "acceptanceCriteria": [
+        "A8"
+      ],
+      "files": [
+        "README.md",
+        "DATA_METHOD.md",
+        "PRODUCT_STATEMENT.md",
+        "AGENTS.md",
+        "llms.txt",
+        "handoff/"
+      ],
+      "status": "done"
+    },
+    {
+      "id": "T8",
+      "title": "Publish on GitHub Pages, verify live bytes and walk the live site",
+      "dependsOn": [
+        "T1",
+        "T2",
+        "T3",
+        "T4",
+        "T5",
+        "T6",
+        "T7"
+      ],
+      "acceptanceCriteria": [
+        "A9",
+        "A14"
+      ],
+      "files": [
+        "scripts/verify-live.mjs",
+        "scripts/build-handoff.mjs",
+        "handoff/VERIFICATION.md"
+      ],
+      "status": "done"
+    },
+    {
+      "id": "T9",
+      "title": "Registry: the Office row of the CityMETER Dataset Registry (R01_DATASETS) points to the demo",
+      "dependsOn": [
+        "T8"
+      ],
+      "acceptanceCriteria": [
+        "A16"
+      ],
+      "files": [],
+      "status": "done"
+    }
+  ],
+  "acceptanceCriteria": [
+    {
+      "id": "A1",
+      "scenario": "decode offices.json",
+      "expected": "608 rows, ids unique, the 4 aggregate references out (meta.excluded)",
+      "verificationType": "unit (tests/data.test.js)"
+    },
+    {
+      "id": "A2",
+      "scenario": "publication hygiene",
+      "expected": "no address, phone, raw record, private link; https sources only; no spreadsheet, credential or LDS library in the tree",
+      "verificationType": "unit (tests/data.test.js, tests/release.test.js)"
+    },
+    {
+      "id": "A3",
+      "scenario": "rent measure",
+      "expected": "276 rents, 256 dated; a median only from ≥ 5 dated rents; fewer is no_data with n; no office is out_of_scope; a rent is never 0",
+      "verificationType": "unit (tests/insight.test.js, tests/data.test.js)"
+    },
+    {
+      "id": "A4",
+      "scenario": "colour parity",
+      "expected": "count and price LUTs and dataState equal the LDS 0.9.7 file (130 checks)",
+      "verificationType": "script (npm run check:lds) + unit (tests/scales.test.js)"
+    },
+    {
+      "id": "A5",
+      "scenario": "first screen",
+      "expected": "3D city preset over บางรัก · ห้วยขวาง · วัฒนา · ปทุมวัน; 47% (202/429); rail 136/191 vs 93/175; outside เมืองเชียงใหม่ 15",
+      "verificationType": "unit fixture + render"
+    },
+    {
+      "id": "A6",
+      "scenario": "station panel",
+      "expected": "offices within 500 m straight line, radius drawn, link to the same station in CityMETER Transit",
+      "verificationType": "unit (tests/views.test.js) + render"
+    },
+    {
+      "id": "A7",
+      "scenario": "ค่าเช่ารอบ ๆ",
+      "expected": "offices with a rent within 1 km, nearest first, ≤ 8, rule chips, median of the radius only from ≥ 5 dated rents",
+      "verificationType": "unit (tests/views.test.js)"
+    },
+    {
+      "id": "A8",
+      "scenario": "provenance and Thai copy on every view",
+      "expected": "one provenance line + “วิธีนับ” per view; no caveat words; no hotel words",
+      "verificationType": "unit (tests/views.test.js) + render"
+    },
+    {
+      "id": "A9",
+      "scenario": "live release",
+      "expected": "the files on GitHub Pages equal the published commit (handoff manifest); no console error on the live walk",
+      "verificationType": "script (npm run verify:live) + live walk"
+    },
+    {
+      "id": "A10",
+      "scenario": "tie at the cut",
+      "expected": "วัฒนา and ปทุมวัน (46) join the focus as the 4th district; five tied leave only the district above",
+      "verificationType": "unit (tests/insight.test.js)"
+    },
+    {
+      "id": "A11",
+      "scenario": "N − 1 rule",
+      "expected": "a province with N ≤ 3 districts holding offices focuses its top N − 1 (เชียงใหม่: เมืองเชียงใหม่ only)",
+      "verificationType": "unit (tests/insight.test.js)"
+    },
+    {
+      "id": "A12",
+      "scenario": "district matching",
+      "expected": "name 543 · point 45 · province 20 · conflict 0; no name/point disagreement",
+      "verificationType": "unit (tests/data.test.js) + build report"
+    },
+    {
+      "id": "A13",
+      "scenario": "building view",
+      "expected": "an office with a point opens the 2-point view of its building or the nearest drawn building (300 m, then 800 m) and switches to 3D",
+      "verificationType": "unit (tests/camera.test.js, tests/building-join.test.js) + render"
+    },
+    {
+      "id": "A14",
+      "scenario": "phone width",
+      "expected": "393 px light and dark: dock, sheet, Aha and legend without overflow or clipped Thai",
+      "verificationType": "render + live walk"
+    },
+    {
+      "id": "A15",
+      "scenario": "organisation filter",
+      "expected": "?org=<id> narrows every view to the organisation’s offices; roles shown; left-out roles never shown",
+      "verificationType": "unit (tests/views.test.js) + render"
+    },
+    {
+      "id": "A16",
+      "scenario": "registry row",
+      "expected": "R01_DATASETS research.TH.office: demo_web_url, demo_repository_url, demo_checked_on and demo_check_note read back from the sheet",
+      "verificationType": "manual read-back"
+    }
+  ],
+  "developerWorkflow": [
+    "edit the research sheet (never data/), export each tab read as CSV (never commit them)",
+    "python3 -I scripts/build-data.py --csv <dir> --read-on YYYY-MM-DD --index data/area-index.json --frames data/frames --transit <montri-th/transit> --out . (DATA_METHOD.md §10)",
+    "npm test",
+    "npm run check:lds -- --lds <LDS 0.9.7 .md>",
+    "bump ?v= tag + package.json + design-intent + handoff JSON",
+    "push main",
+    "npm run handoff:manifest && npm run verify:live",
+    "walk the live site at 1440 and 393 px, light and dark"
+  ],
+  "backlog": [
+    {
+      "id": "B1",
+      "item": "A second rent source (owners’ pages or another broker) to test the medians beyond one broker site",
+      "evidence": "research follow-up (DATA_METHOD.md §9)"
+    },
+    {
+      "id": "B2",
+      "item": "Re-verify the 312 legacy production rows (evidence legacy_source_only)",
+      "evidence": "research follow-up"
+    },
+    {
+      "id": "B3",
+      "item": "Points for the 181 rows without one",
+      "evidence": "research follow-up"
+    },
+    {
+      "id": "B4",
+      "item": "Merge the Thai and English rows of the same company in 18_ORGANIZATIONS (the sheet’s call)",
+      "evidence": "research follow-up"
+    },
+    {
+      "id": "B5",
+      "item": "Dated rents outside Bangkok and Samut Prakan (regional C.P. Tower rents have no month)",
+      "evidence": "research follow-up"
+    },
+    {
+      "id": "B6",
+      "item": "Rights review of the upstream sources before any wider release",
+      "evidence": "sheet README: rights not cleared"
+    },
+    {
+      "id": "B7",
+      "item": "Building units for offices outside the Hotel units (re-run scripts/build-building-units.py on office points)",
+      "evidence": "planned"
+    },
+    {
+      "id": "B8",
+      "item": "Locale Insight and Population context per district; agent feed beyond llms.txt",
+      "evidence": "planned"
+    }
+  ]
+}

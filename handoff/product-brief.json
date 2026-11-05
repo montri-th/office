@@ -1,0 +1,657 @@
+{
+  "$schema": "./handoff.schema.json",
+  "schemaVersion": "1.5.0",
+  "documentType": "product-brief",
+  "productId": "citymeter-office",
+  "productVersion": "0.1.0",
+  "updatedOn": "2026-11-05",
+  "datasetCheckedOn": "2026-11-02",
+  "language": "th",
+  "productName": "CityMETER · Office",
+  "repository": "https://github.com/montri-th/office",
+  "liveUrl": "https://montri-th.github.io/office/",
+  "productStatement": "../PRODUCT_STATEMENT.md",
+  "job": "สำนักงานกระจุกอยู่ตรงไหน ค่าเช่าที่ประกาศเท่าไร และใกล้รถไฟฟ้าแค่ไหน — แล้วเจาะลงถึงเขต สถานี องค์กร และสำนักงาน",
+  "audiences": [
+    "ทีมอสังหาริมทรัพย์ขององค์กรและผู้เช่าสำนักงาน",
+    "เจ้าของอาคาร ผู้พัฒนา และนักลงทุนอสังหาริมทรัพย์",
+    "ผู้ให้บริการพื้นที่ทำงานและนายหน้า",
+    "ทีมวิเคราะห์ ที่ปรึกษา และ agent"
+  ],
+  "journey": [
+    "first Aha (3D city scene, offices)",
+    "switch the measure (สำนักงาน | ค่าเช่า)",
+    "district → categories, evidence, floors, stations, organisations, offices and their rents",
+    "station → offices within 500 m",
+    "organisation → its offices",
+    "office → building view, facts, ค่าเช่ารอบ ๆ",
+    "Google next question",
+    "charts / table",
+    "CityMETER production"
+  ],
+  "changesSince": {
+    "base": "CityMETER · Hotel 0.3.6 (montri-th/hotel @177e592), first Office release",
+    "kept": [
+      "basemap, massing tiers, building units (15 % rule), terrain mode, camera presets, 2-point building view, x-ray, MapLibre 5.6.2 guards",
+      "district/province frames and production codes, breadcrumb and deep links",
+      "Aha shape (≤ 3 districts, tie rule, rail bars, outside finding), row scopes, panel modes and provenance line",
+      "owner standing rules: 41-sample LDS ramps, no caveat on screen, icons over text, one symbol per row, phone dock, Google actions as plain search"
+    ],
+    "replaced": [
+      "rows: 01_VENUES hotels → 01_OFFICES office records (608)",
+      "measures: rooms | records → offices | median dated asking rent (RENT_MIN_N = 5)",
+      "scales: li.supply + count → count + price (LDS 0.9.7, no LI profile scale)",
+      "categories: accommodation groups → office_supply_model groups; evidence filter added (qualification_status)",
+      "chains/brands → organisations by id (19_ORGANIZATION_ROLES → 18_ORGANIZATIONS)",
+      "comparison set: same group, ½–2× rooms, 2 km → offices with an asking rent within 1 km",
+      "symbol size: ∝ rooms → one size for every office",
+      "labels: rooms + recorded price percentiles → floors + asking-rent percentiles"
+    ],
+    "dropped": [
+      "brand logos, current names, resort sites, retail context (Shopping centers), meeting rooms, terrain fact chips"
+    ]
+  },
+  "rowScopes": {
+    "scopeRows": "rows after search · category · evidence · floors · province · organisation, before any district selection or focus: the comparison base of the Aha, the choropleth, the charts and every rank",
+    "baseRows": "scopeRows narrowed by the selected เขต/อำเภอ",
+    "rows": "baseRows narrowed by the district focus: pins with detail, counters, the table (a building, station or organisation panel shows its own rows)"
+  },
+  "firstAha": {
+    "scope": "scopeRows",
+    "measure": "count (default) | rent",
+    "ranking": "count: เขต/อำเภอ by offices inside the home province = the province holding the most offices placed at district level; rent: by the median of dated asking rents (n ≥ RENT_MIN_N) inside the province holding the most dated rents; up to three and never every district holding the measure (N ≤ 3 → top N − 1); never cut through a tie — a tie at the cut joins while the focus stays ≤ 4 and leaves a district out, otherwise only the districts above it; none left → spread",
+    "headlineTemplate": "{share}% ของสำนักงานใน{home} อยู่ใน {n} {เขต|อำเภอ}นี้ (one district: อยู่ใน{เขต|อำเภอ}{name}) · rent: {เขต|อำเภอ}ที่ค่าเช่ากลางสูงสุดใน{home} + each median with its n",
+    "numerator": "count: offices of the focused districts (matched membership); rent: each district’s median with its n (no share)",
+    "denominator": "count: every office of the home province in the selection (homeValue: rows with a district and rows placed only at province level); rent: the home province’s median of every dated rent, n stated",
+    "personality": "rail: count — two bars, the share of offices within 500 m (straight line) of an operating CityMETER Transit station among the focus offices with a point vs the rest of the province’s placed offices with a point, both bases in each bar’s title and accessible text; rent — the median of dated rents within 500 m vs farther in the province, n of each side; hidden when neither side has any",
+    "secondaryFinding": "the district(s) with the most offices (rent: the highest median) outside the home province, every tied district; hidden with a province filter",
+    "defaultFocus": "auto",
+    "defaultCamera": "city preset, fitPitched over the focused districts",
+    "action": "ดูทุกพื้นที่ (?areas=all); เปรียบเทียบพื้นที่ (opens charts); district names are links",
+    "model": "js/area-insight.js#summarizeAreaInsight",
+    "filter": "js/area-insight.js#filterAreaRows",
+    "defaultSnapshot": {
+      "asOf": "2026-11-02",
+      "builtOn": "2026-11-05",
+      "count": {
+        "home": "BKK",
+        "areas": [
+          {
+            "id": "1004",
+            "name": "บางรัก",
+            "value": 63
+          },
+          {
+            "id": "1017",
+            "name": "ห้วยขวาง",
+            "value": 47
+          },
+          {
+            "id": "1039",
+            "name": "วัฒนา",
+            "value": 46
+          },
+          {
+            "id": "1007",
+            "name": "ปทุมวัน",
+            "value": 46
+          }
+        ],
+        "value": 202,
+        "homePlacedValue": 413,
+        "homeValue": 429,
+        "sharePct": 47,
+        "rail": {
+          "m": 500,
+          "focus": {
+            "within": 136,
+            "base": 191,
+            "noPoint": 11
+          },
+          "rest": {
+            "within": 93,
+            "base": 175,
+            "noPoint": 36
+          }
+        },
+        "outside": {
+          "id": "5001",
+          "name": "เมืองเชียงใหม่",
+          "province": "CMI",
+          "value": 15
+        }
+      },
+      "rent": {
+        "home": "BKK",
+        "areas": [
+          {
+            "id": "1007",
+            "name": "ปทุมวัน",
+            "median": 982.5,
+            "n": 26
+          },
+          {
+            "id": "1033",
+            "name": "คลองเตย",
+            "median": 712.5,
+            "n": 24
+          },
+          {
+            "id": "1039",
+            "name": "วัฒนา",
+            "median": 665,
+            "n": 29
+          }
+        ],
+        "province": {
+          "median": 610,
+          "n": 250
+        },
+        "national": {
+          "median": 600,
+          "n": 256
+        },
+        "rail": {
+          "m": 500,
+          "near": {
+            "median": 742.5,
+            "n": 166
+          },
+          "far": {
+            "median": 500,
+            "n": 80
+          }
+        },
+        "outside": {
+          "id": "1103",
+          "name": "บางพลี",
+          "province": "SPK",
+          "median": 550,
+          "n": 5
+        },
+        "districtsWithMedian": 14,
+        "districtsWithRents": 22
+      }
+    },
+    "fallbacks": {
+      "noRows": "“ไม่พบสำนักงานตามตัวกรองนี้” + ล้างตัวกรอง",
+      "spread": "every district of the home province holds the same value: “{n} {เขต}ใน{home} มีสำนักงานเท่ากัน”",
+      "unplaced": "rows without a district: “n แห่ง · ไม่ระบุเขต/อำเภอ”",
+      "rentNone": "“ยังไม่มี{เขต|อำเภอ}ที่มีราคาประกาศครบ 5 รายการในตัวกรองนี้” + the national n and median + ดูจำนวนสำนักงาน",
+      "explicit": "?areas=a,b,c: the chosen districts, their offices (rent: median with n when ≥ 5)"
+    }
+  },
+  "countingUnitContract": {
+    "default": "offices (Office IDs of 01_OFFICES, แห่ง)",
+    "alternatives": [
+      "rent (median of dated starting asking rents, บาท/ตร.ม./เดือน)"
+    ],
+    "words": {
+      "count": "แห่ง",
+      "rent": "บาท/ตร.ม./เดือน"
+    },
+    "rule": "one row = one Office ID (an office premises, building or component; a workspace centre in a host building is its own record; never a building count); the sheet’s aggregate references with child rows are out of every figure (meta.excluded, 4 rows); an undated rent or a legacy production price never enters the rent measure",
+    "switch": "legend radio group (arrow keys), URL ?metric=rent"
+  },
+  "metricContract": {
+    "areas": "count: offices per เขต/อำเภอ (LDS count); rent: the median of the dated asking rents of the district’s offices (LDS price)",
+    "provinces": "the same measure per province frame (offices; median of dated rents)",
+    "eligibility": "rent: a median only from RENT_MIN_N = 5 dated rents (js/model.js#valueOf); fewer is no_data with its n; count: none (totals)",
+    "combined": "count: Σ focus ÷ the home province’s offices in the selection (homeValue, a share with numerator and denominator); rent: no combined figure — each district’s median beside the province’s",
+    "notDrawn": "no per-area or per-person ratio, no average rent, no Σ rent; floor area is never summed",
+    "ramp": "all 41 samples of the family LUT by rank among the measured values being read (js/scales.js#buildRamp; owner standing rule “Color scale ขอให้ใช้ 41 scales ตาม LDS เสมอ”); map, legend, labels, rank bars and the district chart read one ramp; the matrix has its own ramp over its cells"
+  },
+  "coverageContract": {
+    "covered": "every เขต/อำเภอ of the 77 provinces is in the register’s national scope; the register is a research master, not a census",
+    "states": {
+      "measured": "ramp sample by rank",
+      "measured_zero": "count only: sample 0 + zero outline — no office of the dataset is placed there under the filters",
+      "no_data": "rent only: the district has offices but fewer than 5 dated rents (hatch; reason “ราคาประกาศ n รายการ” or “ไม่มีราคาประกาศ”)",
+      "out_of_scope": "rent only: no office in the district (not drawn)",
+      "suppressed": "not used (a suppressed value would still leak through the per-office rents)"
+    },
+    "unplaced": "rows without a district are counted apart (province only), never shown as 0"
+  },
+  "categoricalCueContract": {
+    "registry": "landometer-series-10-v8",
+    "bindBy": "office category id (js/cues.js#GROUP_SERIES)",
+    "groups": {
+      "rental": {
+        "series": 2,
+        "th": "สำนักงานให้เช่า",
+        "models": [
+          "rental_office"
+        ]
+      },
+      "workspace": {
+        "series": 1,
+        "th": "พื้นที่ทำงานแบบบริการ",
+        "models": [
+          "managed_workspace_component"
+        ]
+      },
+      "organization": {
+        "series": 3,
+        "th": "สำนักงานขององค์กร",
+        "models": [
+          "organization_use_record"
+        ]
+      },
+      "hybrid": {
+        "series": 4,
+        "th": "ใช้เองและให้เช่า",
+        "models": [
+          "hybrid_organization_use_and_rental"
+        ]
+      },
+      "unresolved": {
+        "series": 9,
+        "th": "ยังไม่ระบุรูปแบบ",
+        "models": [
+          "unresolved",
+          "rental_office_candidate"
+        ]
+      }
+    },
+    "noStar": true,
+    "sizeCue": "none: one symbol size for every office (js/model.js#pinRadius = k(zoom) × 1.4, min 1.6 px) — a record can be a few floors or a whole tower; quiet context ≤ 6 px radius",
+    "evidence": {
+      "confirmed": "ยืนยันจากแหล่งหลัก",
+      "legacy": "ข้อมูลเดิมจาก CityMETER production",
+      "review": "รอตรวจหลักฐาน"
+    }
+  },
+  "framesContract": {
+    "index": "data/area-index.json — 928 districts and 77 provinces, no geometry (codes, names, production areaSqm, label, bbox)",
+    "frames": "data/frames/{CODE}.json — district outlines per province (77 files)",
+    "loading": "the selection’s provinces at once; the provinces under the map at district zoom (≤ 6 per move); never all 77 up front; versioned with the release tag",
+    "failure": "reported and retried on the next request; panels, charts and table never depend on outlines"
+  },
+  "mapFocusContract": {
+    "principle": "detail only for the focused part — the selected district, the station, the office, the organisation filter, the automatic or explicit focus; everything else visible but quiet",
+    "states": {
+      "auto": "default top districts; released when none of them is on screen",
+      "explicit": "?areas=a,b,c (≤ 3)",
+      "none": "?areas=all"
+    },
+    "choropleth": "count (offices) or price (median asking rent), 41-sample ramp by rank, under the basemap’s first line layer; zoom 8–14.5; the selected จังหวัด from zoom 4; measured_zero = sample 0 + 2 px zero outline; no_data = hatch (districts and province frames)"
+  },
+  "contextContract": {
+    "rail": {
+      "source": {
+        "source": "CityMETER · Transit (montri-th/transit)",
+        "commit": "5f5232d077be08929d8a3325b7003be492688b09",
+        "file": "data/transit.json",
+        "sha256": "0916636a7c50a8832f25c073a9b667bc440ee74aef41bdfe499e663e1cc0bb18",
+        "release": "transit-data-2026-10-31-r1",
+        "asOf": "2026-10-31",
+        "rule": "operating = on the operator roster of CityMETER · Transit; construction = a project station, not a service; straight-line distance from the office point to the station reference point, up to 2000 m"
+      },
+      "drawn": "operating stations as quiet rings from zoom 10.5 (names from 13.5), clickable → station panel; the open station’s 500 m radius dashed",
+      "office": "nearest operating station within 2 km and nearest station under construction (words only), linked to the same station in CityMETER Transit by id"
+    },
+    "distances": "straight lines between reference points — never a walking route, travel time or catchment"
+  },
+  "compsetContract": {
+    "module": "js/profile-model.js#compsetOf",
+    "rule": "offices with a starting asking rent (dated or not) whose point lies within 1,000 m straight line, nearest first, up to 8, every row of the dataset",
+    "around": "every office with a point within 1,000 m and the median of their dated rents when n ≥ 5",
+    "words": "ค่าเช่ารอบ ๆ · rule as chips (มีค่าเช่าที่ประกาศ · ≤ 1 กม.); never คู่แข่ง or a valuation; the limits live behind “วิธีนับ”"
+  },
+  "rentContract": {
+    "field": "28_OFFICE_METRICS.rent_min_thb_sqm_month (rent_max when stated), rent_source_date month, rent_basis, rent_source_url",
+    "period": "listing month 2026-05 to 2026-10 (256 dated of 276); undated rents per office only",
+    "shown": "per office: fact chip “฿x–y /ตร.ม./เดือน · เดือน”, panel, labels, comparison set, table; per area: median with n",
+    "words": "ค่าเช่าที่ประกาศ · ค่าเช่ากลาง (median) · n ราคา; the basis in the chip title",
+    "never": "called a contract, achieved, average or market rent; summed or averaged; 0 for a missing rent",
+    "legacy": "legacy_rent_min/max of CityMETER production (THB/m², period not stated): “ราคาที่บันทึก (เดิม)” per office only where no monthly rent is selected (72 rows), never in a measure"
+  },
+  "organisationContract": {
+    "join": "19_ORGANIZATION_ROLES → 18_ORGANIZATIONS by id (rowOrgs)",
+    "roles": {
+      "office_user": "ใช้เป็นสำนักงาน",
+      "office_unit_operator": "ดำเนินการสำนักงานแห่งนี้",
+      "workspace_service_operator": "ผู้ให้บริการพื้นที่ทำงาน",
+      "workspace_network_affiliation": "อยู่ในเครือข่ายพื้นที่ทำงาน",
+      "leasing_portfolio_brand": "แบรนด์ให้เช่าพื้นที่สำนักงาน",
+      "published_property_portfolio_affiliation": "อยู่ในพอร์ตอาคารที่เผยแพร่",
+      "property_manager_source_reported": "ผู้บริหารอาคารตามแหล่ง",
+      "rental_office_provider": "ผู้ให้เช่าพื้นที่"
+    },
+    "leftOut": [
+      "commercial_leasing_agent_listing",
+      "unverified_brand_affiliation",
+      "co_marketing_association"
+    ],
+    "shown": "chips on the office, organisation filter (?org=), organisation card in the overview, “องค์กร” chart (offices per organisation)",
+    "never": "a verified tenancy, ownership or occupancy; organisations are not merged across the sheet’s Thai and English rows"
+  },
+  "contextActionsContract": {
+    "module": "js/ask.js#contextActions",
+    "views": [
+      "office",
+      "building",
+      "area",
+      "station",
+      "org",
+      "overview"
+    ],
+    "ai": "Google Search with a question written for the view (0.3.3: /search?q=, answered at the top by Google’s AI Overview, AI Mode one tab away; never udm=50, which Google stops at “Continue with this search?” from another site)",
+    "maps": "Google Maps search by public names",
+    "streetView": "only with a point (office point, station reference point “ใกล้สถานี”)",
+    "note": "เปิดใน Google · ผลลัพธ์ไม่ใช่ข้อมูล CityMETER",
+    "dataBoundary": "Google’s answers are Google’s: never copied into the data; rents come only from the research sheet’s dated listings with source"
+  },
+  "buildingJoinContract": {
+    "buildings": "focus-tier footprints: OpenStreetMap (pieces of one outline cut by tile edges, building:parts, podium + tower grouped) or, inside a CityMETER unit, CityMETER Building V4 (whole buildings, keys cm:)",
+    "points": "office points of the scope",
+    "rule": "display-time point-in-footprint (js/building-join.js#joinBuildings)",
+    "click": "one office → the office; several → the building panel “สำนักงานในอาคารนี้” (“สูงราว”, the outline source in the title and the provenance line)",
+    "neverChanges": "any count or district membership",
+    "nearest": "an office whose point falls in no outline is framed on the nearest drawn building (cameraContract.buildingView.target) — never joined, counted or listed in “สำนักงานในอาคารนี้”",
+    "sheetJoin": "01_OFFICES.building_join_status (the research sheet’s join of 2026-11-02: contained in an OpenStreetMap building with its way link, CityMETER building context, named host pending, conflict, none, not checked) is shown as the office’s building status; never re-joined from it, never a change to the map join",
+    "site": "none: Office has no checked research sites (Hotel 0.3.6 data.siteGroups is not carried; js/building-join.js#buildingsAtPoints is unused)"
+  },
+  "interactionContract": {
+    "mapClicks": "focus pin → the building being looked at (x-ray: frame again) → focus building → station → province view district / province frame (below zoom 8) → district",
+    "reframe": "every way into a building view frames it again",
+    "quietDots": "never focusable or clickable",
+    "keyboard": "roving tabindex over HTML pins from zoom 15.5; roving tablist for chart views; arrow keys on the measure switch; visible focus everywhere"
+  },
+  "basemapContract": {
+    "generator": "js/map-style.js (no hosted style URL)",
+    "tiles": "https://tiles.openfreemap.org/planet (OpenMapTiles schema)",
+    "palette": "--basemap-* tokens of assets/theme.css; data colours never set there",
+    "water": "light: --basemap-water #CFDDE7 (basemap-only, 1.22:1 from the ground) and the shore line water-shore --basemap-shore #B2C7D6 (1.26:1 from the water), drawn above the district fill and beneath footprints and roads; rivers --basemap-water-line; dark: LDS surface.blueTint #18333E with shore #1F3F4C (owner 2026-11-02 “… ดูเหมือนน้ำมากกว่านี้ … แต่ยัง clean and quiet”)"
+  },
+  "massingContract": {
+    "cityTier": "basemap building extrusions, quiet, faded with distance from the focus; OpenFreeMap features replaced by CityMETER buildings are hidden (one hashed match) and their buildings outside the focus come back in a context layer drawn the same way",
+    "focusTier": "rounded footprints from z14 tiles in the focus regions (≤ 16 tiles nearest the camera; from zoom 12 in 3D when complete, else 13): OpenStreetMap, or CityMETER Building V4 tiles (≤ 40 requests, per อปท. or แขวง) inside CityMETER units",
+    "hostTier": "unused (no host geometry in this product)",
+    "rounding": "roundingRadiusM(zoom) 3–12 m",
+    "enclosure": "encloseOffsetM keeps the rounded shape around the original outline",
+    "buildingSource": "per unit from data/building-units/ (the CityMETER · Hotel 0.3.6 files, unchanged; scripts/build-building-units.py): CityMETER Building V4 when its count ≥ 1.15 × the OSM count of the unit (owner 2026-11-01), else OSM; OSM buildings mapped in parts stay inside CityMETER units; a missing CityMETER tile leaves its part on OSM; a unit the files do not list draws OSM",
+    "terrain": "fill-extrusions stand on the terrain at their centroid (MapLibre); the building camera fits on the anchor's ground plane and the landed centre's ground; the x-ray solid is lifted the same way"
+  },
+  "cameraContract": {
+    "presets": {
+      "plan": "pitch 0 (3D off)",
+      "city": "pitch 56 · bearing 28 · fov 36.87 (overview)",
+      "model": "pitch 60 · fov 14 (district, office without a point)",
+      "eye": "pitch 75 · fov 24 (the building view: building, office with a point)"
+    },
+    "fitting": "fitPitched (overview, district): flat fit, then zoom out until every outline vertex is inside the padded viewport, then in while it still fits; pitch ≤ 90 − fov/2 − 3",
+    "buildingView": {
+      "owner": "2026-10-29 19:47 “อาคารที่เลือก หรือ on focus ให้แสดงด้วยมุมมอง 2-point perspective เสมอ zoom to fit viewport เสมอด้วย”",
+      "module": "js/camera.js#fitBuilding, twoPointBearing, wallAzimuth, occlusionScore, screenBounds (from CityMETER · Shopping centers); js/app.js#frameFocus",
+      "target": "js/app.js#focusTarget — the open building (building mode); the building the open office’s point falls in, else (the Hotel 0.3.2 rule, owner 2026-11-02 “เวลาคลิกที่ poi hotel แล้วต้องแสดง 2-point perspective ของ 3d building mass ทุกกรณีสิ”, carried to Office) the drawn building nearest the office’s point: js/building-join.js#nearestBuilding — distance from the point to the outline on a local plane, within 300 m (OFFICE_REACH_M), the largest piece within 10 m of the nearest; when nothing is drawn within 300 m the focus tier is loaded once more for 800 m round the point (OFFICE_REACH_FAR_M); legend “อาคารใกล้หมุด”, framed with the point (one zoom step wider, maxZoom 20); a camera choice only, never a join, a count or a located-in claim",
+      "bearing": "dominant wall azimuth + 45°, on the diagonal where the drawn focus buildings (massing.obstaclesNear, 400 m) hide least of it, then the one nearest the current bearing",
+      "fit": "eye preset; shift lens (0.3.2, js/camera.js#lensPadding): padding moves the principal point up to the free box’s centre, never below the canvas centre (pitch + fov/2 < 90 keeps the horizon out), so the camera looks straight at the building at pitch 75 on a phone’s strip above the sheet as on a desktop; fit points = the pieces as the focus tier draws them at building zoom (massing.fitPointsOf → js/massing.js#footprintFitPoints: the offset and fillets of zoom 18, ground and roof), never the shape drawn at the starting zoom (up to 3.6 m wider on every side); every one inside the free box (js/app.js#visibleBox: below the toolbar, above the Aha card, legend, chart tray, table or open phone sheet, left of the zoom control), one side filling 94% of it; maxZoom 21 when the building is known (js/camera.js#BUILDING_MAX_ZOOM — Hotel 0.3.2: small buildings; the Shopping centers limit 19.5 left a 40 m building at half the box) / 18 while unknown, minZoom 14",
+      "unknown": "a 90 m box round the point (12 m tall) framed the same way while the buildings load, and where nothing is drawn within 800 m; the camera turns to the building when it arrives, at most three times, never after a user camera move",
+      "plan": "3D off: the same footprint fitted flat (fitPitched plan, maxZoom 21 known / 18 unknown)",
+      "click": "selectOffice (pin, label, list row, search, comparison set) and selectBuilding switch the map to 3D (js/app.js#ensure3d) before framing; a link keeps view3d=0 when it asks for it",
+      "terrain": "on terrain each fit point carries the ground it is drawn on (4th value: roof at the piece centroid’s ground, base at the lowest ground under its outline, the pin at its own ground); fitBuilding damps its landed rounds (half steps) and js/maplibre-guard.js#guardElevationFreeze lands the centre on the ground after every programmatic ease (MapLibre 5.6.2 leaves map._elevationFreeze on); refitted when the ground changes by ≥ 3 m, a new building arrives or the free box changes once the camera is still (js/app.js#watchFreeBox: legend, trays, phone sheet), at most 3 times, never after a user camera move",
+      "lift": "0.3.2: MapLibre 5.6.2 lifts a camera that would stand inside the terrain (Map#_elevateCameraIfInsideTerrain: lower pitch, other zoom) on every jump; fitBuilding computes with it off (withoutLift) and asks MapLibre’s own check about the camera it found — the alternates (the other corners, opposite first: js/app.js#frameFocus) when that camera would be lifted, else the pitch MapLibre allows; the target carries its pitch and the centre’s elevation (an instant jump checks from the right height)"
+    }
+  },
+  "tileCoverGuard": {
+    "module": "js/maplibre-guard.js#guardRetainedTiles(map, version) → boolean; padOverscaledChildren(idealTileIDs, zoom, maxzoom)",
+    "bug": "MapLibre GL JS 5.6.2 SourceCache._updateRetainedTiles checks the four children of a missing ideal tile whenever the cover zoom + 1 ≤ the source maxzoom; a pitched cover can already hold an ideal tile at the maxzoom, whose children() is ONE overscaled child; when that child is retained, children[1] is undefined and the frame throws “Cannot read properties of undefined (reading 'key')”",
+    "seen": "live 2026-10-29 (Claude desktop browser, real OpenFreeMap tiles): openmaptiles (vector, maxzoom 14), cover zoom 13, camera 13.79–13.95, pitch 75, while the building camera flew between branches; reproduced in the build container by stepping the pitched camera out from 19.5 to 13.6 over a building (7–8 errors on 0.2.0, 0 with the guard)",
+    "fix": "pad the child list of exactly those ideal tiles to four copies of the overscaled child, so the check reads as MapLibre's own overzoom branch; installed on the shared SourceCache prototype at every style load; only for version 5.6.2",
+    "test": "tests/maplibre-guard.test.js",
+    "elevationFreeze": "js/maplibre-guard.js#guardElevationFreeze(map, version), 0.3.2: MapLibre 5.6.2 easeTo/flyTo on terrain without freezeElevation leave map._elevationFreeze on (only a gesture or _finalizeElevation clears it), so the render loop stops clamping the centre to the ground and the framed building drifts (seen 2026-11-02: camera 80.97 m vs ground 62.41 m at Sri Panwa); the guard wraps map._afterEase: when the ease ended (not superseded) and no terrain gesture is running, it clears the freeze and sets the centre elevation to the ground; only for version 5.6.2 (tests/maplibre-guard.test.js)"
+  },
+  "venueXrayContract": {
+    "owner": "2026-10-29 19:47 “เช็คอย่าให้ 3d building mass ตึกอื่นบังอาคารที่กำลังดูอยู่”",
+    "module": "js/venue-xray.js#installVenueXray(map, {beforeId, toMercator, colors}) → {update(features, {colors}), setEnabled, hitTest(point), dispose, count, enabled, failed} (from CityMETER · Shopping centers / Luxury Brands)",
+    "layer": "venue-xray (custom, renderingMode 3d) before place-quarter (js/map-style.js#VENUE_XRAY_BEFORE): drawn over every building and over road names",
+    "input": "the features of the building being looked at (massing.featuresOf(target.refs)) with display_height_m / display_base_m; on terrain the roof is lifted by the ground at the piece centroid (as MapLibre lifts fill-extrusions) and the walls go down to the lowest ground under the outline (0.3.2; a fixed 10 m showed through the slope)",
+    "depth": "scissored depth clear inside the building’s screen box, then its own depth test",
+    "seeThrough": "massing.setScene('eye', rings): the focus buildings standing in front of it turn see-through (SCENE.eye)",
+    "labels": "district label chips never sit on the building (refreshLabelView avoid box), nor do the offices’ name labels (js/labels.js#installOfficeLabels avoid → buildingScreenBox)",
+    "visibility": "3D only, zoom ≥ 13 (XRAY_MIN_ZOOM); empty outside the building view",
+    "colours": "map.activeLayer faces, map.selectedStroke edges — map roles, not data colours",
+    "failSafe": "a GL error disables it (failed = true); the massing highlight keeps drawing",
+    "geojsonMaxzoom": "every GeoJSON source uses maxzoom 24 (js/map-layers.js#GEOJSON_MAXZOOM, the most geojson-vt allows), two levels above BUILDING_MAX_ZOOM: MapLibre 5.6.2 throws in SourceCache._updateRetainedTiles when the near tiles of a pitched cover reach a GeoJSON source maxzoom before they have data (seen in CityMETER · Shopping centers 2026-10-25); under the eye preset the near tiles sit up to about half a level above the camera (tests/release.test.js)"
+  },
+  "breadcrumbContract": {
+    "levels": [
+      "ประเทศไทย",
+      "จังหวัด",
+      "เขต/อำเภอ"
+    ],
+    "productionPath": "/v3/citymeter/{code}/D/{district}?d=office",
+    "demoQuery": "?province=BKK&area=1007",
+    "provinceCodes": "production route codes (base info lv0 abbrEn)",
+    "datasetCode": "office (https://landometer.com/v3/citymeter?d=office)"
+  },
+  "provinceContract": {
+    "frames": "data/provinces.geojson",
+    "fill": "the measure below zoom 8 without a province filter (rent: hatch for a province with offices but < 5 dated rents)",
+    "labels": "ink chips to zoom 9",
+    "unknown": "none in this export"
+  },
+  "pictogramContract": {
+    "file": "assets/icons/material-pictogram-300.woff2",
+    "sha256": "0e68b6b0207bf62a5c592dba7dfb5149dceb951e5548c931289192cb1244f52b",
+    "manifest": "assets/icons/material-pictogram-300.json (the CityMETER · Hotel 0.3.6 subset, unchanged bytes)",
+    "used": [
+      "area",
+      "province",
+      "building",
+      "rail",
+      "price",
+      "chain (organisation)",
+      "compare (ค่าเช่ารอบ ๆ)",
+      "meeting (อัตราการเช่า)",
+      "relief (ชั้น)",
+      "rank",
+      "date",
+      "distance",
+      "construction",
+      "dataset",
+      "ai",
+      "maps",
+      "streetview"
+    ],
+    "rule": "decorative (aria-hidden); the text carries the meaning; no star"
+  },
+  "panel": {
+    "modes": [
+      "overview (+ organisation card)",
+      "area",
+      "station",
+      "building",
+      "office"
+    ],
+    "actions": [
+      "select-area",
+      "select-office",
+      "select-building",
+      "select-station",
+      "select-province",
+      "filter-org",
+      "filter-group",
+      "filter-ev",
+      "set-metric",
+      "back",
+      "explore-top",
+      "clear-focus",
+      "open-charts",
+      "open-table",
+      "clear-filter",
+      "leave-area"
+    ],
+    "models": {
+      "overview": "js/profile-model.js#buildOverview",
+      "area": "buildAreaProfile",
+      "station": "buildStationProfile",
+      "building": "buildBuildingProfile",
+      "office": "buildOfficeDetail (+ compsetOf)",
+      "org": "buildOrgProfile"
+    },
+    "provenance": "exactly one line per view: dataset · source (+ Transit when shown) · date · boundary, then “วิธีนับ” → DATA_METHOD.md",
+    "phoneSheet": "56dvh bottom sheet (0.3.5; was 64dvh), sticky close; in the office, building, station and area modes the dataset heading is visually hidden (kept for screen readers) and the search form is off — the filter chips stay"
+  },
+  "data": {
+    "file": "data/offices.json",
+    "rows": 608,
+    "counts": {
+      "admin.name": 543,
+      "admin.point": 45,
+      "admin.province": 20,
+      "area.known": 346,
+      "evidence.confirmed": 293,
+      "evidence.legacy": 312,
+      "evidence.review": 3,
+      "excluded.aggregate": 4,
+      "floors.known": 360,
+      "group.hybrid": 3,
+      "group.organization": 168,
+      "group.rental": 216,
+      "group.unresolved": 162,
+      "group.workspace": 59,
+      "link.none": 135,
+      "link.public": 473,
+      "orgs.rows": 331,
+      "points": 427,
+      "rent.legacyOnly": 72,
+      "rent.monthly": 276,
+      "rent.monthly.noPublicLink": 0,
+      "rent.monthly.undated": 20,
+      "rows": 608
+    },
+    "registryId": "research.TH.office",
+    "inputs": {
+      "01_OFFICES": {
+        "sha256": "c03e37f096b2869ba7be4c0114018866916ec2529db45d09c9c4e6f474b4217d",
+        "rows": 612
+      },
+      "15_PROJECTS": {
+        "sha256": "68eecedb453cc6f2e578d44b42875a9217219b3ff24a9b3a86d4bd247bb46dad",
+        "rows": 76
+      },
+      "18_ORGANIZATIONS": {
+        "sha256": "a12bd40ccbd7387c832fa1f462de2cf121b4daa72576abf117ac21b83add9eaf",
+        "rows": 80
+      },
+      "19_ORGANIZATION_ROLES": {
+        "sha256": "a27e70c0d4a98d52237b6f5ef464ee40fc367083131eb6420d75179d7eb8eca6",
+        "rows": 582
+      },
+      "23_OFFICE_ALIASES": {
+        "sha256": "f6d84bd541b2f2be94a62746b2b334d0678c07323fd8227a7b2a0e6e3b7b16a2",
+        "rows": 1068
+      },
+      "28_OFFICE_METRICS": {
+        "sha256": "eadadd3114185536770ec8f6567bfa02fa0865b6327073199530b100cd021dd6",
+        "rows": 612
+      }
+    },
+    "readOn": "2026-11-05",
+    "checkedOn": "2026-11-02",
+    "builtOn": "2026-11-05",
+    "stations": 215,
+    "organisations": 77,
+    "projects": 44,
+    "excluded": [
+      "OFF-596113F3904D",
+      "OFF-B29FE5621107",
+      "OFF-D01C1EA23E29",
+      "OFF-D442F0073D68"
+    ],
+    "method": "DATA_METHOD.md",
+    "build": "scripts/build-data.py",
+    "report": "data/build-report.json"
+  },
+  "visualSystem": {
+    "lds": "Landometer-Design-System-v0.9.7.md (standalone-0.9.7-r1, v0.9.7-owner.1, color-srgb-10, sha256 d3085cbc…96)",
+    "scales": "count (scaleVersion 4ff5c1fb…) and price (scaleVersion a4fcda65…), 41-sample LUTs copied exactly; EVID-05 treatments from the base dataState; no Location Intelligence profile scale",
+    "parity": "scripts/check-lds-parity.mjs — 130 checks",
+    "themes": "light and dark; analytical HEX identical on both",
+    "fonts": "Bai Jamjuree · IBM Plex Sans Thai Looped · Arvo · JetBrains Mono (assets/lds/build-kit)"
+  },
+  "invariants": [
+    {
+      "id": "O1",
+      "rule": "an office record is never called a building; a count of offices is never a count of buildings or floor area"
+    },
+    {
+      "id": "O2",
+      "rule": "a rent is “ค่าเช่าที่ประกาศ”; never a contract, achieved, average or market rent; never 0 for a missing rent"
+    },
+    {
+      "id": "O3",
+      "rule": "an area median needs ≥ 5 dated rents and always shows its n; fewer is no_data with its n"
+    },
+    {
+      "id": "O4",
+      "rule": "undated rents and legacy production prices are per office only, never in a measure"
+    },
+    {
+      "id": "O5",
+      "rule": "membership is the district matched at build time (row.admin); never re-assigned on screen"
+    },
+    {
+      "id": "O6",
+      "rule": "distances are straight lines between reference points; never walking time or catchment"
+    },
+    {
+      "id": "O7",
+      "rule": "the Aha never cuts a tie and never focuses every district holding the measure"
+    },
+    {
+      "id": "O8",
+      "rule": "every panel view ends with exactly one provenance line and the “วิธีนับ” link; no caveat on screen"
+    },
+    {
+      "id": "O9",
+      "rule": "one symbol = one office with a point, one size for every office; never clustered"
+    },
+    {
+      "id": "O10",
+      "rule": "organisations join by id only; a role is a source claim, never a tenancy or ownership check"
+    },
+    {
+      "id": "O11",
+      "rule": "colours only from assets/theme.css, js/scales.js, js/cues.js; 41 samples by rank; same HEX on both themes"
+    },
+    {
+      "id": "O12",
+      "rule": "no address, phone, raw record, researcher text, private document link or Landometer commercial term in the repository"
+    }
+  ],
+  "chartContracts": [
+    {
+      "viewKey": "areas",
+      "title": "เขต/อำเภอ",
+      "question": "เขต/อำเภอไหนมีสำนักงานมากที่สุด (หรือค่าเช่ากลางสูงสุด)",
+      "encoding": "bars in the map’s ramp colour, top 20 of every ranked district (rent: districts with a median only, n in the label)",
+      "metric": "the current measure",
+      "scope": "scopeRows"
+    },
+    {
+      "viewKey": "mix",
+      "title": "รูปแบบสำนักงาน",
+      "question": "แต่ละเขต/อำเภอมีสำนักงานรูปแบบใด",
+      "encoding": "top 12 districts × 5 categories, equal cells, own 41-sample count ramp, measured zero outlined",
+      "metric": "offices",
+      "scope": "scopeRows"
+    },
+    {
+      "viewKey": "orgs",
+      "title": "องค์กร",
+      "question": "องค์กรไหนผูกกับสำนักงานมากที่สุด",
+      "encoding": "bars in one neutral foundation fill, top 20, roles in the label",
+      "metric": "offices",
+      "scope": "scopeRows (rows with an organisation)"
+    }
+  ],
+  "delivery": {
+    "site": "GitHub Pages from main /root",
+    "handoff": "dist/CityMETER-Office-Developer-Handoff.zip (START_HERE.md, RELEASE_RECEIPT.json, evidence/, source/)",
+    "liveCheck": "npm run verify:live",
+    "cacheTag": "?v=20261105-r1 on every entry file and, through the import map, on every ES module; the frame files take the same tag from import.meta.url; bump it with package.json version (tests/release.test.js); icon fonts inside the stylesheets carry ?v=<first 8 hex of their SHA-256> (tests/icons.test.js)"
+  }
+}
