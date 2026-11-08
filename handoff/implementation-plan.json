@@ -3,7 +3,7 @@
   "schemaVersion": "1.5.0",
   "documentType": "implementation-plan",
   "productId": "citymeter-office",
-  "productVersion": "0.2.1",
+  "productVersion": "0.3.0",
   "updatedOn": "2026-11-05",
   "architecture": {
     "runtime": "static site (GitHub Pages), ES modules with an import map, no build step; Node ≥ 20 for tests, Python 3 for data builds",
@@ -53,7 +53,7 @@
       "js/shell/geometry.js": "",
       "js/navigation.js": "",
       "js/shell/vendors.js": "",
-      "js/launch.js": "",
+      "js/shell/launch.js": "",
       "js/labels.js": "names near the middle of the view (importance = floors + asking-rent percentiles), hover card of icon chips",
       "js/shell/terrain.js": "terrain mode at hilly sites and round a building or office being looked at",
       "js/shell/building-units.js": "buildings per area: the per-province unit files of Hotel 0.3.6 (data/building-units/), CityMETER zones, production tile URLs and the attribution"

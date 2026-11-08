@@ -3,7 +3,7 @@
   "schemaVersion": "1.5.0",
   "documentType": "product-statement",
   "productId": "citymeter-office",
-  "productVersion": "0.2.1",
+  "productVersion": "0.3.0",
   "updatedOn": "2026-11-05",
   "dataset_id": "research.TH.office",
   "productionDatasetCode": "office",
