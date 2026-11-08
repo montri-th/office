@@ -1,6 +1,6 @@
 {
   "artifact": "CityMETER Office — 3D-first, district-first map of office records across Thailand (organisation premises, rental offices and managed workspaces), with the median of listed starting asking rents per area, rail context from the same registry, organisations and a rent comparison set per office",
-  "productVersion": "0.2.0",
+  "productVersion": "0.2.1",
   "updatedOn": "2026-11-05",
   "ldsVersion": "0.9.7",
   "release": "v0.9.7-owner.1",
@@ -57,16 +57,16 @@
     "mobilePortrait": "full map, five toolbar buttons in one row (วิธีใช้ and Product statement at the top of the sheet); 0.3.5 (owner 2026-11-02 “ในมือถือ เหลือพื้นที่ map น้อยมาก ช่วยปรับปรุงด้วย”): one compact dock at the foot of the map — the Aha finding in two lines with its action, over one legend row (measure switch | level + zero swatch over the 41-sample ramp) — above the attribution while it is open, dropped to the tray once it folds to its (i) button; zoom buttons off on touch phones (pinch; the compass stays); bottom sheet 56% of the screen with a sticky close, opening on the office, building, station or area (the dataset heading and search return with the overview)"
   },
   "mapContract": {
-    "basemap": "generated at runtime by js/map-style.js on https://tiles.openfreemap.org/planet with --basemap-* tokens",
+    "basemap": "generated at runtime by js/shell/map-style.js on https://tiles.openfreemap.org/planet with --basemap-* tokens",
     "choropleth": "count (offices) or price (median dated asking rent), all 41 samples by rank over the measured values; beneath the basemap’s first line layer; zoom 8–14.5 (8–12.5 in terrain mode, hard switch), the selected จังหวัด from zoom 4; EVID-05 measured / measured_zero (count: sample 0 + 2 px zero outline) / no_data (rent: < 5 dated rents, hatch) / out_of_scope (rent: no office, bare)",
     "provinces": "the same measure per province frame below zoom 8 without a จังหวัด filter (rent: hatch where < 5 dated rents), outlines to zoom 12, ink-chip labels to zoom 9, panel list",
     "symbols": "focus rows with a point as cue icons at one size for every office; context rows as grey circles ≤ 6 px radius; HTML pins from zoom 15.5; the pin label is office name · floors · asking rent; stations of CityMETER Transit as quiet clickable rings from zoom 10.5, names from 13.5",
     "buildings": "per อปท. (Bangkok: เขต): CityMETER Building V4 where it holds ≥ 1.15 × the OSM buildings of the unit, else OSM (data/building-units/); OSM buildings mapped in parts kept; same quiet massing tones and rounded shape for both sources; the attribution names CityMETER Building V4 while drawn",
-    "buildingView": "eye preset corner-on to the building on the least-occluded diagonal, zoom to fit the free part of the map on every way in (js/camera.js#fitBuilding); a station frames its 500 m radius; every office with a point opens it — the building its pin falls in, else the drawn building nearest the pin within 300 m (800 m after one widen) with the pin in the frame (legend “อาคารใกล้หมุด”); choosing an office or a building switches the map to 3D",
+    "buildingView": "eye preset corner-on to the building on the least-occluded diagonal, zoom to fit the free part of the map on every way in (js/shell/camera.js#fitBuilding); a station frames its 500 m radius; every office with a point opens it — the building its pin falls in, else the drawn building nearest the pin within 300 m (800 m after one widen) with the pin in the frame (legend “อาคารใกล้หมุด”); choosing an office or a building switches the map to 3D",
     "breadcrumb": "ประเทศไทย › จังหวัด › เขต/อำเภอ with production codes and /D/ deep links, ?d=office",
     "symbolSize": "one size for every office (js/model.js#pinRadius): an Office ID can be a few floors or a tower, so no record is drawn larger than another; quiet context ≤ 6 px radius",
     "labels": "from zoom 12.5: ≤ 9 (phone 5) labels in the central ellipse ranked by floors + asking-rent percentiles; text only — category cue, short name (leading “อาคาร” and place words dropped), price pictogram + starting asking rent; measured placement off the chrome and the district chips (js/labels.js)",
-    "terrain": "terrain mode at hilly sites (zoom ≥ 12.5, 3D, relief ≥ 30 m in view) and round a building or office being looked at: 3D ground × 1.5 + hillshade in basemap tones; the district fill switches off at 12.5 (hard switch); buildings, the x-ray and the building camera stand on the drawn ground (js/terrain.js, js/camera.js) — carried from Hotel 0.3.0",
+    "terrain": "terrain mode at hilly sites (zoom ≥ 12.5, 3D, relief ≥ 30 m in view) and round a building or office being looked at: 3D ground × 1.5 + hillshade in basemap tones; the district fill switches off at 12.5 (hard switch); buildings, the x-ray and the building camera stand on the drawn ground (js/shell/terrain.js, js/shell/camera.js) — carried from Hotel 0.3.0",
     "iconFirstText": "district chips carry the measure pictogram, the status is a pin + number, legend items are a symbol + 1–2 words; sentences live in titles and accessible names (owner 2026-11-01)",
     "water": "light water --basemap-water #CFDDE7 (basemap-only, 1.22:1 from the ground) with the water-shore line --basemap-shore #B2C7D6 above the district fill; dark keeps surface.blueTint #18333E (0.3.4, owner “ใน light theme ทำให้ทะเล/water body ดูเหมือนน้ำมากกว่านี้ … แต่ยัง clean and quiet”); the coast line, district outlines and legend separate the sea from low li.supply classes, never the water hue alone"
   },

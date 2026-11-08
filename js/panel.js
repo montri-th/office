@@ -480,7 +480,7 @@ export function renderStation(p, ctx = {}) {
 
 /* ---------- Building (display-time spatial join) ---------- */
 
-/** Where a drawn building's outline and height come from (per อปท./เขต, js/building-units.js). */
+/** Where a drawn building's outline and height come from (per อปท./เขต, js/shell/building-units.js). */
 export const BUILDING_SOURCE_TH = Object.freeze({osm: 'OpenStreetMap', cm: 'CityMETER Building V4'});
 
 export function renderBuilding(b, ctx = {}) {
@@ -580,7 +580,7 @@ export function renderOffice(d, ctx = {}) {
     ${provenance(ctx, d.area ? `${w.area}${d.area.name} ${prov}` : prov || 'ไม่ระบุจังหวัด', {rail: Boolean(r.rail || r.railNext), rent: Boolean(r.rent || d.compset?.matches)})}`;
 }
 
-/** Terrain chips (js/terrain.js#terrainChips) as fact chips; '' when nothing is known. */
+/** Terrain chips (js/shell/terrain.js#terrainChips) as fact chips; '' when nothing is known. */
 export function terrainChipsHTML(chips) {
   return chips.map(c => `<span class="fact-chip" title="${esc(c.title)}">${pic(c.kind)}${esc(c.text)}</span>`).join('');
 }
