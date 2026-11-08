@@ -1,6 +1,6 @@
 {
   "artifact": "CityMETER Office — 3D-first, district-first map of office records across Thailand (organisation premises, rental offices and managed workspaces), with the median of listed starting asking rents per area, rail context from the same registry, organisations and a rent comparison set per office",
-  "productVersion": "0.1.0",
+  "productVersion": "0.2.0",
   "updatedOn": "2026-11-05",
   "ldsVersion": "0.9.7",
   "release": "v0.9.7-owner.1",
