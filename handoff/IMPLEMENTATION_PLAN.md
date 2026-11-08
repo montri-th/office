@@ -18,7 +18,7 @@ Static site บน GitHub Pages · ES modules ผ่าน import map (ทุก
 | `js/map-layers.js` · `js/provinces.js` · `js/frames.js` · `js/areas.js` | choropleth เขต/อำเภอ, กรอบจังหวัด (ลายทแยง no data บนมาตรวัดค่าเช่า), ขอบเขตรายจังหวัด, ดัชนีพื้นที่ |
 | `js/pins.js` · `js/stations.js` · `js/labels.js` | หมุดสำนักงาน (ขนาดเดียว), สถานีและวงรัศมี, ชื่อกลางจอ (ชั้น + ค่าเช่าที่ประกาศ) |
 | `js/ask.js` · `js/breadcrumb.js` · `js/navigation.js` | ปุ่ม Google (Search + AI Overview, Maps, Street View), เส้นทาง, ไอคอนและวิธีใช้ |
-| `js/massing.js` · `js/camera.js` · `js/venue-xray.js` · `js/building-join.js` · `js/maplibre-guard.js` · `js/map-style.js` · `js/mvt.js` · `js/geometry.js` · `js/building-units.js` · `js/terrain.js` | มวลอาคาร กล้อง มุมมองอาคาร x-ray ภูมิประเทศ และ guard ของ MapLibre — สืบทอดจาก Hotel 0.3.6 โดยไม่เปลี่ยนพฤติกรรม |
+| `js/massing.js` · `js/shell/camera.js` · `js/shell/venue-xray.js` · `js/shell/building-join.js` · `js/shell/maplibre-guard.js` · `js/shell/map-style.js` · `js/shell/mvt.js` · `js/shell/geometry.js` · `js/shell/building-units.js` · `js/shell/terrain.js` | มวลอาคาร กล้อง มุมมองอาคาร x-ray ภูมิประเทศ และ guard ของ MapLibre — สืบทอดจาก Hotel 0.3.6 โดยไม่เปลี่ยนพฤติกรรม |
 
 สคริปต์: `scripts/build-data.py` (ชีตวิจัย → `data/offices.json` + `data/build-report.json`) · `build-boundaries.py` · `build-receipts.py` · `fetch-base.py` · `build-building-units.py` · `check-lds-parity.mjs` · `build-handoff.mjs` · `verify-live.mjs`
 

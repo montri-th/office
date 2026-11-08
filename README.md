@@ -19,7 +19,7 @@ npm start   # http://127.0.0.1:4173/
 npm test    # unit tests บนข้อมูลจริง (node --test)
 ```
 
-เป็น static site ไม่มี build step และไม่ต้อง `npm install` (Node ≥ 20 สำหรับ tests, Python 3 สำหรับ server) แผนที่โหลด MapLibre GL 5.6.2 จาก unpkg และ tiles/glyphs จาก OpenFreeMap; basemap สร้างเองใน `js/map-style.js` กราฟไม่ใช้ไลบรารีภายนอก ถ้าแผนที่โหลดไม่ได้ ข้อค้นพบ แผง กราฟ และตารางยังใช้ได้ โค้ดฐานมาจาก CityMETER · Hotel 0.3.6 (montri-th/hotel @177e592)
+เป็น static site ไม่มี build step และไม่ต้อง `npm install` (Node ≥ 20 สำหรับ tests, Python 3 สำหรับ server) แผนที่โหลด MapLibre GL 5.6.2 จาก unpkg และ tiles/glyphs จาก OpenFreeMap; basemap สร้างเองใน `js/shell/map-style.js` กราฟไม่ใช้ไลบรารีภายนอก ถ้าแผนที่โหลดไม่ได้ ข้อค้นพบ แผง กราฟ และตารางยังใช้ได้ โค้ดฐานมาจาก CityMETER · Hotel 0.3.6 (montri-th/hotel @177e592)
 
 ## สิ่งที่สำรวจได้
 
