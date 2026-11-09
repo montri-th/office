@@ -13,6 +13,8 @@ const offices = (t, n) => `${n} ${t.plural(n, 'office', 'offices')}`;
 const rents = (t, n) => `${n} ${t.plural(n, 'asking rent', 'asking rents')}`;
 const floors = (t, n) => `${n} ${t.plural(n, 'floor', 'floors')}`;
 const re = source => new RegExp(`^${source}$`);
+/** A tile's label under its number: "77 provinces", "1 province". */
+const count = (one, many) => (el, t) => t.plural(el.previousElementSibling?.textContent, one, many);
 /** "เขตคลองเตย กรุงเทพมหานคร" or "อำเภอถลาง" → "Khlong Toei, Bangkok" / "Thalang"; null if a part is unknown. */
 function place(t, text) {
   const s = text.trim();
@@ -401,6 +403,16 @@ export default {
     'เขต': 'District',
     'ประเทศไทย': 'Thailand',
   },
+  contexts: [
+    // A count after a bold number (js/panel.js nw(…)): "1 office", "46 offices".
+    ['.nowrap', {'แห่ง': (el, t) => t.plural(el.querySelector('strong')?.textContent, 'office', 'offices')}],
+    // A tile's label under its number (js/panel.js#metricTile, citymeter-shell 0.5.1): "4 districts", "1 province".
+    ['.metric > span:not([class])', {
+      'จังหวัด': count('province', 'provinces'), 'เขต/อำเภอ': count('district', 'districts'),
+      'เขต': count('district', 'districts'), 'อำเภอ': count('district', 'districts'),
+      'แห่ง': count('office', 'offices'), 'แห่ง ในโฟกัส': count('office in focus', 'offices in focus'),
+    }],
+  ],
   patterns: [
     // Titles: "[page] · CityMETER" — the page part
     [/^สำนักงาน (.+)$/, (m, t) => { const p = t.known(m[1]); return p ? `Offices in ${p}` : null; }],
