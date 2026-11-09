@@ -504,7 +504,7 @@ export default {
     [re(`อันดับ ${N} (.+?) ${N} แห่ง(?: ค่าเช่ากลาง ${MONEY} \\(${N} ราคา\\))?`), (m, t) =>
       `No. ${m[1]} ${place(t, m[2])}, ${offices(t, m[3])}${m[4] ? `, median asking rent ฿${m[4]} (${rents(t, m[5])})` : ''}`],
     [re(`(.+) ${N} แห่ง กดเพื่อดูจังหวัด`), (m, t) => { const p = t.known(m[1]); return p ? `${p}, ${offices(t, m[2])}, select to view the province` : null; }],
-    [re(`(สถานี.+) ${N} แห่ง`), (m, t) => `${t.name(m[1])}, ${offices(t, m[2])}`],
+    [re(`(สถานี[^·—]+) ${N} แห่ง`), (m, t) => `${t.name(m[1])}, ${offices(t, m[2])}`],
     [re('ค่าเช่ากลางสูงสุดใน(.+?): (.+)'), (m, t) => `Highest median rent in ${t.name(m[1])}: ${place(t, m[2])}`],
     [re('ค่าเช่ากลางสูงสุดใน(.+)'), (m, t) => `Highest median rent in ${t.name(m[1])}`],
     [re(`โฟกัส ${N} (?:เขต\\/อำเภอ|เขต|อำเภอ)`), (m, t) => `Focus on ${m[1]} ${t.plural(m[1], 'district', 'districts')}`],
