@@ -1,6 +1,6 @@
 {
   "name": "citymeter-office",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "private": true,
   "type": "module",
   "description": "CityMETER · Office — district-first 3D map of office records across Thailand (organisation premises, rental offices and managed workspaces), with the median of listed starting asking rents per area, rail context from CityMETER Transit, organisations and a rent comparison set per office",
