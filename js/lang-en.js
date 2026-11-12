@@ -139,6 +139,7 @@ export default {
     'ดูหน้าถัดไปของตาราง': 'Next page of the table',
     // Filters
     'ค้นหาสำนักงาน อาคาร องค์กร หรือพื้นที่': 'Search offices, buildings, organisations or areas',
+    'ลองชื่ออาคาร องค์กร สถานี เขต/อำเภอ หรือจังหวัด': 'Try the name of a building, an organisation, a station, a district or a province',
     'ค้นหาชื่อสำนักงาน อาคาร องค์กร เขต/อำเภอ หรือจังหวัด': 'Search names of offices, buildings, organisations, districts or provinces',
     'ตัวกรอง': 'Filters',
     'ตัวกรองที่ใช้อยู่': 'Active filters',
@@ -275,6 +276,7 @@ export default {
     'จำนวนชั้นของอาคาร': 'Floors of the building',
     'ผู้ให้บริการพื้นที่ทำงาน': 'Workspace provider',
     'อัตราการเช่าตามรายงานของเจ้าของ': 'Occupancy reported by the owner',
+    'อัตราการเช่า': 'Occupancy',
     // Data vocabulary (data/offices.json) without English in the data
     'ยืนยันจากแหล่งหลัก': 'Confirmed by a primary source',
     'ข้อมูลเดิมจาก CityMETER production': 'Earlier data from CityMETER production',
@@ -409,6 +411,8 @@ export default {
     'ประเทศไทย': 'Thailand',
   },
   contexts: [
+    // The line under a name in the search list (js/find.js#searchNote): one entry, so the singular.
+    ['.find-where', {'สถานีรถไฟฟ้า': 'Rail station', 'องค์กร': 'Organisation', 'รูปแบบสำนักงาน': 'Office type', 'จังหวัด': 'Province'}],
     // A count after a bold number (js/panel.js nw(…)): "1 office", "46 offices".
     ['.nowrap', {'แห่ง': (el, t) => t.plural(el.querySelector('strong')?.textContent, 'office', 'offices')}],
     // A tile's label under its number (js/panel.js#metricTile, citymeter-shell 0.5.1): "4 districts", "1 province".
