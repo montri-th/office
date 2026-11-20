@@ -93,3 +93,10 @@ test('the panel words each date in Thai, and the English page reads it', () => {
   assert.equal(translate('ตามนายหน้า'), 'per the broker');
   assert.equal(translate('ตามข่าวประชาสัมพันธ์'), 'per a press release');
 });
+
+test('the map’s building legend and credit read in English (live harvest of release 0.5.5, 2026-11-21)', () => {
+  registerDictionary(OFFICE_EN);
+  assert.equal(translate('อาคารที่เปิดดูอยู่ · ขอบอาคาร CityMETER Building V4 และ OpenStreetMap'), 'Building being viewed · CityMETER Building V4 and OpenStreetMap outlines');
+  assert.equal(translate('อาคารที่เปิดดูอยู่ · ขอบอาคาร CityMETER Building V4'), 'Building being viewed · CityMETER Building V4 outline');
+  assert.equal(translate('| อาคาร:'), '| Buildings:');
+});
