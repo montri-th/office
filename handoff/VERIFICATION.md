@@ -135,3 +135,12 @@ https://citymeter.pages.dev/office/?d=office&at=BKK” and “นำผลลั
 - The live English harvest, with the map's tiles loaded, found two strings no local harvest showed: the building
   legend title “อาคารที่เปิดดูอยู่ · ขอบอาคาร CityMETER Building V4 และ OpenStreetMap” and the building credit “| อาคาร:”.
   Release 0.5.6 (cache tag `20261121-r2`) adds them to `js/lang-en.js`, with a test.
+- 0.5.6 production:
+  - pull request #20 merged as `9341045`;
+  - GitHub Pages deployment 7948688221 succeeded;
+  - publish run 44787455427 (17:52–17:53 UTC): 114 / 114 live checks, demo family check passed on the site and live;
+  - `npm run verify:live`: 254 / 254 files match (manifest 290 files, commit `9341045`).
+- Live in English with the map's tiles loaded (cache tag `20261121-r2`):
+  - `?at=BKK/D/1007&m=rent` and WHA Tower leave nothing untranslated (`__citymeterI18n.missing` empty);
+  - the building legend reads “Building being viewed · OpenStreetMap outline”;
+  - WHA Tower reads “52,000 m² · per the owner · published 21 Jun 2022”.
