@@ -60,7 +60,12 @@ export function registerDataNames({index, raw}) {
     if (name && thai.test(name) && en) pairs.push([name, en]);
   }
   registerNames(pairs);
-  // Names with no English in the data stay Thai: organisations, offices and their other names, projects.
+  // A station with no English in the data (the stations under construction) stays Thai in every form written above.
+  const stationsThai = (raw?.stations || []).filter(s => !s.nameEn && s.name).flatMap(s => {
+    const th = s.lines?.length ? `${s.name} (${s.lines.join(' · ')})` : '';
+    return [s.name, `สถานี${s.name}`, ...(th ? [th, `สถานี${th}`] : [])];
+  });
+  // Names with no English in the data stay Thai: organisations, offices and their other names, projects, those stations.
   keepThai([...(raw?.orgs || []).flatMap(o => [o.name, shortOrgName(o.name)]), ...(c.name || []), ...(c.alt || []),
-    ...(raw?.projects || []), ...Object.values(raw?.aliases || {}).flat()].filter(x => typeof x === 'string'));
+    ...(raw?.projects || []), ...Object.values(raw?.aliases || {}).flat(), ...stationsThai].filter(x => typeof x === 'string'));
 }

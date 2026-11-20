@@ -34,6 +34,11 @@ export const metricOf = id => METRICS[id] || METRICS.count;
 /** Unit words for a measure ('' = records). */
 export const unitWords = (metric = '') => ({...metricOf(metric), mode: metricOf(metric).id});
 /** An area carries a median rent only with at least this many dated asking rents. */
+/** Who published a leasable-area figure (data/offices.json lease[k][4], scripts/build-data.py#lease_by): the panel's
+ *  words after the figure. Leasable area is [sqm, when, checked, url, by, scope] and occupancy [rate, when, checked,
+ *  scope, url]: `when` is the date the figure refers to (a token of scripts/build-data.py#ref_when, worded by
+ *  js/panel.js#whenText), `checked` the day the page was checked, `scope` the source's scope in its own words. */
+export const LEASE_BY = Object.freeze({o: 'ตามเจ้าของ', b: 'ตามนายหน้า', p: 'ตามข่าวประชาสัมพันธ์'});
 export const RENT_MIN_N = 5;
 
 /** Floor bands of the building the record sits in (28_OFFICE_METRICS floors); unknown floors are in none. */
@@ -173,8 +178,8 @@ export function decodeDataset(json, index) {
       rent: pos(c.rmin[i]) ? {min: c.rmin[i], max: pos(c.rmax[i]), on: c.ron[i] || '', basis: V.rentBasis?.[c.rbasis[i]] || '', url: url(c.rurl[i])} : null,
       legacyPrice: legacy[k] ? {min: pos(legacy[k][0]), max: pos(legacy[k][1])} : null,
       year: pos(c.year[i]),
-      lease: lease[k] ? {sqm: lease[k][0], ref: lease[k][1] || '', url: url(lease[k][2])} : null,
-      occupancy: occupancy[k] ? {rate: occupancy[k][0], ref: occupancy[k][1] || '', scope: occupancy[k][2] || '', url: url(occupancy[k][3])} : null,
+      lease: lease[k] ? {sqm: lease[k][0], when: lease[k][1] || '', checked: lease[k][2] || '', url: url(lease[k][3]), by: LEASE_BY[lease[k][4]] || LEASE_BY.o, scope: lease[k][5] || ''} : null,
+      occupancy: occupancy[k] ? {rate: occupancy[k][0], when: occupancy[k][1] || '', checked: occupancy[k][2] || '', scope: occupancy[k][3] || '', url: url(occupancy[k][4])} : null,
       orgs: (rowOrgs[k] || []).map(([o, rs]) => ({org: orgs[o], roles: rs.map(x => roles[x]).filter(Boolean)})).filter(x => x.org),
       project: c.proj[i] >= 0 ? json.projects?.[c.proj[i]] || '' : '',
       aliases: aliases[k] || [],

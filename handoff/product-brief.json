@@ -3,8 +3,8 @@
   "schemaVersion": "1.5.0",
   "documentType": "product-brief",
   "productId": "citymeter-office",
-  "productVersion": "0.5.4",
-  "updatedOn": "2026-11-05",
+  "productVersion": "0.5.5",
+  "updatedOn": "2026-11-21",
   "datasetCheckedOn": "2026-11-02",
   "language": "th",
   "productName": "CityMETER · Office",
@@ -71,8 +71,8 @@
     "model": "js/area-insight.js#summarizeAreaInsight",
     "filter": "js/area-insight.js#filterAreaRows",
     "defaultSnapshot": {
-      "asOf": "2026-11-02",
-      "builtOn": "2026-11-05",
+      "asOf": "2026-11-20",
+      "builtOn": "2026-11-21",
       "count": {
         "home": "BKK",
         "areas": [
@@ -512,8 +512,20 @@
       "group.rental": 216,
       "group.unresolved": 162,
       "group.workspace": 59,
+      "lease.broker": 8,
+      "lease.owner": 66,
+      "lease.pressRelease": 1,
+      "lease.when.d": 17,
+      "lease.when.fy": 9,
+      "lease.when.none": 41,
+      "lease.when.p": 3,
+      "lease.when.q": 3,
+      "lease.when.r": 2,
       "link.none": 135,
       "link.public": 473,
+      "occupancy.when.d": 11,
+      "occupancy.when.m": 2,
+      "occupancy.when.r": 5,
       "orgs.rows": 331,
       "points": 427,
       "rent.legacyOnly": 72,
@@ -525,33 +537,33 @@
     "registryId": "research.TH.office",
     "inputs": {
       "01_OFFICES": {
-        "sha256": "c03e37f096b2869ba7be4c0114018866916ec2529db45d09c9c4e6f474b4217d",
+        "sha256": "fada793bf5ccf423b2a3bda497642c26b8edc89aa3bf5cb2dcef82f8a7af6fd2",
         "rows": 612
       },
       "15_PROJECTS": {
-        "sha256": "68eecedb453cc6f2e578d44b42875a9217219b3ff24a9b3a86d4bd247bb46dad",
+        "sha256": "5b73332e8c4b4c37b3ac8e18d2e04844c1fd4e58180792b51f71c2ddc5463b2c",
         "rows": 76
       },
       "18_ORGANIZATIONS": {
-        "sha256": "a12bd40ccbd7387c832fa1f462de2cf121b4daa72576abf117ac21b83add9eaf",
+        "sha256": "e94d4b977467ffa9d9ca453112b4a480ae2517a8e8e6adbd15e8247f115c314a",
         "rows": 80
       },
       "19_ORGANIZATION_ROLES": {
-        "sha256": "a27e70c0d4a98d52237b6f5ef464ee40fc367083131eb6420d75179d7eb8eca6",
+        "sha256": "8d82748893790bcec2006dce5585ee5eefeb00d24787963da2a7eb4632f4db2b",
         "rows": 582
       },
       "23_OFFICE_ALIASES": {
-        "sha256": "f6d84bd541b2f2be94a62746b2b334d0678c07323fd8227a7b2a0e6e3b7b16a2",
+        "sha256": "7aa840aa4ffcd95f024575edade866a68d1fde0491b6327b801215c6132c3acd",
         "rows": 1068
       },
       "28_OFFICE_METRICS": {
-        "sha256": "eadadd3114185536770ec8f6567bfa02fa0865b6327073199530b100cd021dd6",
+        "sha256": "dd1b97d5804c58c63e5e642e16fea6d30e9f17d3f997a25d9717dcd83defa3e5",
         "rows": 612
       }
     },
-    "readOn": "2026-11-05",
-    "checkedOn": "2026-11-02",
-    "builtOn": "2026-11-05",
+    "readOn": "2026-11-21",
+    "checkedOn": "2026-11-20",
+    "builtOn": "2026-11-21",
     "stations": 215,
     "organisations": 77,
     "projects": 44,
@@ -652,6 +664,6 @@
     "site": "GitHub Pages from main /root",
     "handoff": "dist/CityMETER-Office-Developer-Handoff.zip (START_HERE.md, RELEASE_RECEIPT.json, evidence/, source/)",
     "liveCheck": "npm run verify:live",
-    "cacheTag": "?v=20261118-r2 on every entry file and, through the import map, on every ES module; the frame files take the same tag from import.meta.url; bump it with package.json version (tests/release.test.js); icon fonts inside the stylesheets carry ?v=<first 8 hex of their SHA-256> (tests/icons.test.js)"
+    "cacheTag": "?v=20261121-r1 on every entry file and, through the import map, on every ES module; the frame files take the same tag from import.meta.url; bump it with package.json version (tests/release.test.js); icon fonts inside the stylesheets carry ?v=<first 8 hex of their SHA-256> (tests/icons.test.js)"
   }
 }

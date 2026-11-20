@@ -299,6 +299,61 @@ def repo_commit(path):
     return head
 
 
+MON3 = {m: i + 1 for i, m in enumerate(['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'])}
+
+
+def ref_when(text):
+    """A reference field of 28_OFFICE_METRICS (office_area_reference, occupancy_reference: free text, e.g.
+    '2025-12-31', 'FY2025', 'undated;checked2026-11-01', 'CBRE Bangkok office figures Q4 2023; checked 2026-11-20')
+    → (when, checked): what date the figure refers to, as a token the panel words (js/panel.js#whenText), and the day the
+    page was checked, '' when not stated. Tokens: 'd:YYYY-MM-DD' as of a day, 'm:YYYY-MM' a month, 'r:A/B' a period,
+    'q:YYYY-N' a quarter, 'fy:YYYY' a fiscal year, 'p:YYYY-MM-DD' or 'p:YYYY' the publication of a figure whose own
+    date is not stated, '' no date for the figure (an undated page, or no date the rules know). Never guessed: a text
+    the rules do not read gives ''."""
+    t = (text or '').strip()
+    checked = ''
+    mc = re.search(r'(?:checked|retrieved)\s*(\d{4}-\d{2}-\d{2})', t, re.I)
+    if mc:
+        checked = mc.group(1)
+    if re.search(r'\bundated\b', t, re.I):
+        return '', checked
+    rules = [
+        (r'as-?of\s*(\d{4}-\d{2}-\d{2})', lambda m: 'd:' + m.group(1)),
+        (r'snapshot\s*(\d{1,2})([A-Za-z]{3})(\d{4})',
+         lambda m: f'd:{m.group(3)}-{MON3[m.group(2).lower()]:02d}-{int(m.group(1)):02d}' if m.group(2).lower() in MON3 else ''),
+        (r'\bFY\s*(\d{4})', lambda m: 'fy:' + m.group(1)),
+        (r'^(\d{4}-\d{2}-\d{2})\s*/\s*(\d{4}-\d{2}-\d{2})$', lambda m: f'r:{m.group(1)}/{m.group(2)}'),
+        (r'(\d{4})-Q([1-4])\b', lambda m: f'q:{m.group(1)}-{m.group(2)}'),
+        (r'\bQ([1-4])\s*/?\s*(\d{4})', lambda m: f'q:{m.group(2)}-{m.group(1)}'),
+        (r'\bsurvey\s*(\d{4}-\d{2}-\d{2})', lambda m: 'd:' + m.group(1)),
+        (r'^(\d{4}-\d{2}-\d{2})$', lambda m: 'd:' + m.group(1)),
+        (r'publi(?:cation|shed)\s*(\d{4}-\d{2}-\d{2})', lambda m: 'p:' + m.group(1)),
+        (r'^(\d{4}-\d{2}-\d{2})\s+\S', lambda m: 'p:' + m.group(1)),
+        (r'^(\d{4}-\d{2})(?![-\d])', lambda m: 'm:' + m.group(1)),
+        (r'^(\d{4}) (?:press release|annual report|article)', lambda m: 'p:' + m.group(1)),
+    ]
+    for pattern, token in rules:
+        m = re.search(pattern, t, re.I)
+        if m:
+            return token(m), checked
+    return '', checked
+
+
+def scope_words(text):
+    """A scope field (office_leasable_area_scope, occupancy_scope) as words: '_' and ';' read as spaces and '; ',
+    whole — the panel folds it under “ขอบเขตตามแหล่ง” instead of cutting it."""
+    s = re.sub(r'\s*;\s*', '; ', (text or '').strip().replace('_', ' '))
+    return re.sub(r'\s{2,}', ' ', s).strip(' ;')
+
+
+def lease_by(basis):
+    """Who published a leasable-area figure (office_leasable_area_basis): 'b' a broker's listing or market report
+    (broker_*), 'p' a press release whose issuer is unclear (press_release_*), else 'o' — the owner, operator,
+    issuer or fund (every figure the sheet carried before 2026-11-20 was of that kind)."""
+    b = (basis or '').strip().lower()
+    return 'b' if b.startswith('broker_') else 'p' if b.startswith('press_release_') else 'o'
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('--csv', required=True, help='directory of <tab>.csv read from the research master (SHA-256 of each recorded)')
@@ -449,6 +504,7 @@ def main():
                             'rbasis', 'year', 'province', 'district', 'admin', 'lat', 'lon', 'coord', 'src', 'url', 'mass', 'bld',
                             'rail', 'railM', 'rail2', 'rail2M', 'proj')}
     row_orgs, occupancy, lease, legacy_price, row_aliases = {}, {}, {}, {}, {}
+    figure_checked = set()  # days a published figure's page was checked (ref_when), with the sheet's checked_on columns
     counts = collections.Counter()
     conflicts, disagree = [], []
     rent_bases, area_bases = [], []
@@ -620,16 +676,27 @@ def main():
                 entry.append([org_index[org], sorted(rset)])
             row_orgs[i] = entry
             counts['orgs.rows'] += 1
-        # Owner-published figures (never averaged): leasable office area and occupancy, with reference and scope.
+        # Published figures (never averaged): leasable office area — owner, broker or press release, by the sheet's
+        # office_leasable_area_basis (lease_by) — and occupancy, with reference and scope.
         la = fnum(m.get('office_leasable_area_sqm'))
         if la and la > 0:
             link = public_urls(m.get('office_area_source_url'))
-            lease[i] = [int(round(la)), (m.get('office_area_reference') or '').strip()[:60], url_i(link[0]) if link else -1]
+            by = lease_by(m.get('office_leasable_area_basis'))
+            when, checked = ref_when(m.get('office_area_reference'))
+            lease[i] = [int(round(la)), when, checked, url_i(link[0]) if link else -1, by, scope_words(m.get('office_leasable_area_scope'))]
+            figure_checked |= {checked} - {''}
+            counts['lease.' + {'o': 'owner', 'b': 'broker', 'p': 'pressRelease'}[by]] += 1
+            counts['lease.when.' + (when.split(':')[0] if when else 'none')] += 1
         occ = (m.get('occupancy_rate') or '').strip()
         if occ:
             link = public_urls(m.get('occupancy_source_url'))
-            ref = us_date(m.get('occupancy_as_of_date')) or (m.get('occupancy_reference') or '').strip()[:60]
-            occupancy[i] = [occ, ref, re.sub(r'[_;]+', ' ', (m.get('occupancy_scope') or '').strip())[:90], url_i(link[0]) if link else -1]
+            when, checked = ref_when(m.get('occupancy_reference'))
+            start, end = us_date(m.get('occupancy_period_start_date')), us_date(m.get('occupancy_period_end_date'))
+            asof = us_date(m.get('occupancy_as_of_date'))
+            when = f'd:{asof}' if asof else f'r:{start}/{end}' if start and end else when
+            occupancy[i] = [occ, when, checked, scope_words(m.get('occupancy_scope')), url_i(link[0]) if link else -1]
+            figure_checked |= {checked} - {''}
+            counts['occupancy.when.' + (when.split(':')[0] if when else 'none')] += 1
         if aliases.get(oid):
             row_aliases[i] = [x for x in aliases[oid] if x.casefold() not in (name.casefold(), alt.casefold())][:12]
             if not row_aliases[i]:
@@ -650,7 +717,8 @@ def main():
 
     checked = sorted({us_date(r.get('checked_on')) for r in offices if us_date(r.get('checked_on'))}
                      | {us_date(m.get('checked_on')) for m in metrics.values() if us_date(m.get('checked_on'))}
-                     | {us_date(m.get('owner_metrics_checked_on')) for m in metrics.values() if us_date(m.get('owner_metrics_checked_on'))})
+                     | {us_date(m.get('owner_metrics_checked_on')) for m in metrics.values() if us_date(m.get('owner_metrics_checked_on'))}
+                     | figure_checked)
     rent_months = sorted({x[:7] for x in cols['ron'] if x})
     built_on = datetime.date.today().isoformat()
     meta = {
