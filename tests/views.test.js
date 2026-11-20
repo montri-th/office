@@ -42,7 +42,7 @@ test('every panel view ends with one provenance line — dataset · source · da
       for (const k of ['dataset', 'source', 'date', 'boundary']) assert.equal((html.match(new RegExp(`data-prov="${k}"`, 'g')) || []).length, 1, `${name}: ${k}`);
       assert.ok(t.includes('ชุดข้อมูล CityMETER Office'), `${name}: dataset`);
       assert.ok(/แหล่ง\s*จาก CityMETER Office · หน้าทางการ · พอร์ตเจ้าของอาคาร/.test(t), `${name}: source`);
-      assert.ok(t.includes('ตรวจ 2 พ.ย. 2569'), `${name}: date`);
+      assert.ok(t.includes('ตรวจ 20 พ.ย. 2569'), `${name}: date`); // the latest check day in the sheet (meta.checkedOn), 2026-11-20 since release 0.5.5
       assert.ok(/ขอบเขต \S/.test(t), `${name}: boundary`);
       assert.ok(html.includes('<span class="prov-part prov-method"><a href="DATA_METHOD.md"'), `${name}: the method link`);
       assert.equal((html.match(/class="hint panel-foot provenance"/g) || []).length, 1, `${name}: exactly one provenance line`);

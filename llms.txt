@@ -8,6 +8,7 @@ What one figure means:
 - median rent of an area = the median of the dated asking rents of its offices, only from 5 of them; with fewer the area shows how many rents it has, never a median.
 - recorded price (เดิม) = the legacy CityMETER production price (THB per m², period not stated), shown per office only where no monthly rent is selected; never in a measure.
 - floors, area = the building's storeys and the source area with their status and basis (GLA/GFA often unstated).
+- leasable area, occupancy = per office as published (by the owner, a broker or a press release), with the date the figure refers to, the day the page was checked and the source's scope; never summed or averaged.
 - organisations = roles of 19_ORGANIZATION_ROLES (office user, operator, workspace provider or network, leasing brand, published portfolio, property manager, rental provider), source claims — not a verified tenancy, ownership or occupancy.
 - distances = straight lines between reference points, not walking routes or catchments.
 - districts = CityMETER production districts (codes as in https://landometer.com/v3/citymeter/{province}/D/{district}?d=office).

@@ -7,9 +7,9 @@
 | ช่อง | ค่า |
 |---|---|
 | ผลิตภัณฑ์ | CityMETER · Office (ชุดข้อมูลในกลุ่ม Land ของ CityMETER; registry `research.TH.office`) |
-| รุ่น | 0.1.0 · 5 พ.ย. 2569 · https://montri-th.github.io/office/ |
+| รุ่น | 0.5.5 · 21 พ.ย. 2569 · https://montri-th.github.io/office/ |
 | ระบบจริงที่ต่อยอด | ชุดข้อมูล `office` ของ CityMETER production (https://landometer.com/v3/citymeter?d=office) |
-| ข้อมูล | Research master “CityMETER Office — Venue, Company & Building Research Master 2026-10-24” ตรวจแหล่ง 24 ต.ค.–2 พ.ย. 2569 · 608 สำนักงาน · ราคาประกาศเดือน พ.ค.–ต.ค. 2569 |
+| ข้อมูล | Research master “CityMETER Office — Venue, Company & Building Research Master 2026-10-24” ตรวจแหล่ง 24 ต.ค.–20 พ.ย. 2569 · 608 สำนักงาน · ราคาประกาศเดือน พ.ค.–ต.ค. 2569 |
 | สถานะ | เดโมสาธารณะ ไม่มีผู้ใช้ภายนอกที่ยืนยันแล้ว · CityMETER อยู่ที่ “เข้าสู่ตลาดระยะแรก” (MBB v0.5.3 §5.1) |
 | ลำดับอำนาจ | owner amendment → MBB v0.5.3 → Product Brief CityMETER v6 → เอกสารนี้ → LDS 0.9.7 (กำกับรูปแบบ) |
 | ป้ายหลักฐาน | Observed fact · Inference · Hypothesis ตาม MBB §3.7 กำกับในแต่ละข้อ |

@@ -675,6 +675,13 @@ button.fact-chip:hover { background: var(--surface-alt); }
 .source-details summary::before { content: ""; flex: 0 0 auto; width: 6px; height: 6px; margin: 0 10px 0 4px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(-45deg); transition: transform .15s ease; }
 .source-details[open] summary::before { transform: rotate(45deg); }
 .source-details .facts { margin-top: 4px; }
+.fact-scope { margin-top: 2px; }
+.fact-scope > summary { display: inline-flex; align-items: center; min-height: 44px; cursor: pointer; list-style: none; font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+.fact-scope > summary::-webkit-details-marker { display: none; }
+.fact-scope > summary::before { content: ""; flex: 0 0 auto; width: 6px; height: 6px; margin: 0 8px 0 2px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(-45deg); transition: transform .15s ease; }
+.fact-scope[open] > summary::before { transform: rotate(45deg); }
+.fact-scope > span { display: block; padding: 0 0 6px 16px; font-size: 12px; color: var(--text-metadata); }
+@media (prefers-reduced-motion: reduce) { .fact-scope > summary::before { transition: none; } }
 .popup-identity { display: flex; gap: 10px; align-items: center; margin-right: 28px; }
 .map-panel .maplibregl-popup-content .popup-identity h3 { margin-right: 0; }
 .map-panel .maplibregl-popup-content .popup-branch { margin-top: 0; color: var(--text-primary); }

@@ -59,6 +59,30 @@ export function thaiDate(iso) {
   if (/^\d{4}-\d{2}$/.test(iso || '')) { const [y, m] = iso.split('-').map(Number); return `${MONTHS[m - 1]} ${y + 543}`; }
   return iso || '';
 }
+/** The date a published figure refers to, from its token (scripts/build-data.py#ref_when): "ข้อมูล ณ 31 ธ.ค. 2568",
+ *  "ไตรมาส 4/2566", "ปีบัญชี 2568", "ทั้งปี 2568", "ข้อมูลช่วง เม.ย.–มิ.ย. 2569", "เผยแพร่ 21 มิ.ย. 2565"; '' for no date.
+ *  `short` leaves out "ข้อมูล ณ" for a chip. */
+export function whenText(when = '', {short = false} = {}) {
+  const [kind, value = ''] = String(when).split(/:(.*)/s);
+  const be = y => Number(y) + 543;
+  if (kind === 'd' || kind === 'm') return short ? thaiDate(value) : `ข้อมูล ณ ${thaiDate(value)}`;
+  if (kind === 'q') { const [y, q] = value.split('-'); return `ไตรมาส ${q}/${be(y)}`; }
+  if (kind === 'fy') return `ปีบัญชี ${be(value)}`;
+  if (kind === 'r') {
+    const [a, b] = value.split('/');
+    if (a.slice(0, 4) === b.slice(0, 4) && a.slice(5) === '01-01' && b.slice(5) === '12-31') return `ทั้งปี ${be(a.slice(0, 4))}`;
+    return short ? monthSpan([a, b]) : `ข้อมูลช่วง ${monthSpan([a, b])}`;
+  }
+  if (kind === 'p') return /^\d{4}$/.test(value) ? `เผยแพร่ปี ${be(value)}` : `เผยแพร่ ${thaiDate(value)}`;
+  return '';
+}
+/** A published figure's dates and scope after its value: when · checked · link, the scope folded. */
+function figureNote(f, linkText) {
+  const parts = [whenText(f.when) || 'ไม่ระบุวันที่ของตัวเลข'];
+  if (f.checked) parts.push(`ตรวจ ${thaiDate(f.checked)}`);
+  const head = parts.map(esc).join(' · ') + (f.url ? ` · ${link(f.url, linkText)}` : '');
+  return head + (f.scope ? `<details class="fact-scope"><summary>ขอบเขตตามแหล่ง</summary><span lang="en" translate="no">${esc(f.scope)}</span></details>` : '');
+}
 /** "พ.ค.–ต.ค. 2569" from listing months. */
 export function monthSpan(months = []) {
   const list = [...months].filter(m => /^\d{4}-\d{2}/.test(m)).sort();
@@ -534,7 +558,7 @@ export function renderOffice(d, ctx = {}) {
   const rentChip = r.rent ? `<span class="fact-chip" title="ค่าเช่าเริ่มต้นที่ประกาศ บาทต่อตารางเมตรต่อเดือน · ${esc(r.rent.basis)}">${pic('price')}${esc(rentText(r.rent))} ${nw('/ตร.ม./เดือน')}${r.rent.on ? ` · ${nw(esc(thaiDate(r.rent.on)))}` : ''}</span>` : '';
   const legacyChip = !r.rent && r.legacyPrice ? `<span class="fact-chip" title="ราคาเดิมใน CityMETER production บาทต่อตารางเมตร">${pic('price')}${esc(rentText(r.legacyPrice))} ${nw('/ตร.ม. ที่บันทึก (เดิม)')}</span>` : '';
   const spaceChip = r.space ? `<span class="fact-chip" title="${esc(r.space.basis)} · ${esc(r.space.status)}">${pic('area')}${nw(`${num(r.space.sqm)} ตร.ม.`)}</span>` : '';
-  const occChip = r.occupancy ? `<span class="fact-chip" title="อัตราการเช่าตามรายงานของเจ้าของ · ${esc(r.occupancy.scope)}">${pic('meeting')}เช่าแล้ว ${esc(r.occupancy.rate)}${r.occupancy.ref ? ` · ${esc(/^\d{4}-\d{2}-\d{2}$/.test(r.occupancy.ref) ? thaiDate(r.occupancy.ref) : r.occupancy.ref)}` : ''}</span>` : '';
+  const occChip = r.occupancy ? `<span class="fact-chip" title="อัตราการเช่าตามรายงานของเจ้าของ · ${esc(r.occupancy.scope)}">${pic('meeting')}เช่าแล้ว ${esc(r.occupancy.rate)}${r.occupancy.when ? ` · ${nw(esc(whenText(r.occupancy.when, {short: true})))}` : ''}</span>` : '';
   const railChip = r.rail ? `<button type="button" class="fact-chip" data-action="select-station" data-id="${esc(r.rail.station.id)}" title="สถานีที่เปิดแล้วที่ใกล้ที่สุด · ระยะตรง">${pic('rail')}${esc(stationShort(r.rail.station))} ${nw(esc(meters(r.rail.m)))}</button>` : '';
   const nextChip = r.railNext && (!r.rail || r.railNext.m < r.rail.m)
     ? `<span class="fact-chip" title="สถานีที่กำลังสร้างที่ใกล้ที่สุด · ระยะตรง">${pic('construction')}${esc(stationShort(r.railNext.station))} ${nw(esc(meters(r.railNext.m)))} · กำลังสร้าง</span>` : '';
@@ -566,8 +590,8 @@ export function renderOffice(d, ctx = {}) {
           ${!r.rent && r.legacyPrice ? `<dt>ราคาที่บันทึก (เดิม)</dt><dd>${esc(rentText(r.legacyPrice))} บาท/ตร.ม. · CityMETER production · ไม่ระบุรอบ</dd>` : ''}
           ${r.floors ? `<dt>จำนวนชั้น</dt><dd>${num(r.floors)} ชั้น · ${esc(r.floorStatus)}</dd>` : ''}
           ${r.space ? `<dt>พื้นที่</dt><dd>${num(r.space.sqm)} ตร.ม. · ${esc(r.space.basis)} · ${esc(r.space.status)}</dd>` : ''}
-          ${r.lease ? `<dt>พื้นที่ให้เช่า</dt><dd>${num(r.lease.sqm)} ตร.ม. · ตามเจ้าของ${r.lease.ref ? ` · ${esc(r.lease.ref)}` : ''}${r.lease.url ? ` · ${link(r.lease.url, 'หน้าอ้างอิง')}` : ''}</dd>` : ''}
-          ${r.occupancy ? `<dt>อัตราการเช่า</dt><dd>${esc(r.occupancy.rate)} · ${esc(r.occupancy.scope)}${r.occupancy.ref ? ` · ${esc(r.occupancy.ref)}` : ''}${r.occupancy.url ? ` · ${link(r.occupancy.url, 'หน้าอ้างอิง')}` : ''}</dd>` : ''}
+          ${r.lease ? `<dt>พื้นที่ให้เช่า</dt><dd>${num(r.lease.sqm)} ตร.ม. · ${esc(r.lease.by)} · ${figureNote(r.lease, 'หน้าอ้างอิง')}</dd>` : ''}
+          ${r.occupancy ? `<dt>อัตราการเช่า</dt><dd>${esc(r.occupancy.rate)} · ${figureNote(r.occupancy, 'หน้าอ้างอิง')}</dd>` : ''}
           ${r.year ? `<dt>ปีที่สร้าง</dt><dd>${esc(String(r.year))} · ค่าเดิมใน CityMETER production</dd>` : ''}
           <dt>พื้นที่ปกครอง</dt><dd>${esc(ADMIN_TH[r.admin] || '')}</dd>
           <dt>พิกัด</dt><dd>${point}</dd>

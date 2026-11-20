@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {load, readJSON, readBytes, frameFiles, sha256} from './helpers.js';
-import {hasPoint, filterRows, summarize, rowValue, valueOf, unitWords, sizeOf, median, rentStats, SIZE_BANDS, RENT_MIN_N} from '../js/model.js';
+import {hasPoint, filterRows, summarize, rowValue, valueOf, unitWords, sizeOf, median, rentStats, SIZE_BANDS, RENT_MIN_N, LEASE_BY} from '../js/model.js';
 import {distanceM} from '../js/profile-model.js';
 
 test('offices.json decodes to every counted Office ID of 01_OFFICES, nothing dropped, ids unique; aggregate references stay out', () => {
@@ -154,6 +154,20 @@ test('boundaries: 928 districts and 77 provinces from production; per-province f
     ? `{${Object.keys(v).sort().map(k => `${JSON.stringify(k)}: ${py(v[k])}`).join(', ')}}` : JSON.stringify(v));
   assert.equal(sha256(Buffer.from(py(receipts.base))), receipts.baseSha256);
   assert.equal(indexJSON.metadata.receiptsSha256, receipts.baseSha256);
+});
+
+test('leasable area says who published it (owner 2026-11-20: broker and press-release figures beside the owner’s); never averaged', () => {
+  const {raw, data} = load();
+  const entries = Object.values(raw.lease);
+  assert.ok(entries.every(e => e.length === 6 && Number.isInteger(e[0]) && e[0] > 0 && typeof e[1] === 'string' && typeof e[2] === 'string' && Number.isInteger(e[3]) && ['o', 'b', 'p'].includes(e[4]) && typeof e[5] === 'string'), 'each figure: sqm, when, checked, link index, publisher, scope');
+  const by = k => entries.filter(e => e[4] === k).length;
+  assert.equal(by('o'), raw.meta.counts['lease.owner']);
+  assert.equal(by('b'), raw.meta.counts['lease.broker']);
+  assert.equal(by('p'), raw.meta.counts['lease.pressRelease'] || 0);
+  const rows = data.rows.filter(r => r.lease);
+  assert.equal(rows.length, entries.length);
+  assert.ok(rows.every(r => Object.values(LEASE_BY).includes(r.lease.by)), 'the panel names the publisher in Thai');
+  assert.ok(rows.filter(r => r.lease.url).every(r => /^https:\/\//.test(r.lease.url)), 'reference links are https');
 });
 
 test('the build report matches the shipped data file', () => {

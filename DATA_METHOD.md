@@ -1,9 +1,9 @@
 # CityMETER · Office — data and method
 
 How `data/offices.json` is built, what one row and one figure mean, and what the demo never claims. Every number below is
-a snapshot of release 0.1.0 (data built 2026-11-05 from the research master tabs read the same day; the sheet's own
-checks run 2026-10-24 to 2026-11-02); the page computes everything from the data at run time, so these are fixtures, not
-constants.
+a snapshot of the data of release 0.5.5 (built 2026-11-21 from the research master tabs exported that day; the sheet's own
+checks run 2026-10-24 to 2026-11-20, where 2026-11-20 is the leasable-area check of section 2); the page computes
+everything from the data at run time, so these are fixtures, not constants.
 
 ## วิธีนับ — อ่านตัวเลขในหน้าอย่างไร
 
@@ -15,7 +15,8 @@ constants.
 - **ราคาที่บันทึก (เดิม)** = ราคาต่อตารางเมตรของ CityMETER production รุ่นเดิม ไม่ระบุรอบเวลา แสดงเฉพาะสำนักงานที่ไม่มีค่าเช่ารายเดือน ไม่เข้าค่ากลางหรือการจัดอันดับ
 - **ชั้น** = จำนวนชั้นของอาคารที่สำนักงานอยู่ตามแหล่ง พร้อมสถานะ (ตรงกันมากกว่าหนึ่งแหล่ง · จากแหล่งหลัก · จากหน้าประกาศ · ค่าเดิมใน CityMETER production · แหล่งข้อมูลขัดกัน) ค่าที่แหล่งขัดกันแสดงพร้อมสถานะ แต่ไม่เข้ากลุ่มความสูง
 - **พื้นที่ (ตร.ม.)** = พื้นที่ตามแหล่งพร้อมฐาน ส่วนใหญ่ไม่ระบุว่าเป็นพื้นที่เช่าหรือพื้นที่อาคารรวม ไม่นำมาบวกหรือหาค่าเฉลี่ย
-- **อัตราการเช่า** = ตัวเลขที่เจ้าของรายงาน (เช่น รายงานประจำปีของกองทรัสต์) พร้อมวันที่อ้างอิงและขอบเขต (บางรายการเป็นทั้งพอร์ต ไม่ใช่เฉพาะสำนักงาน) แสดงรายสำนักงาน ไม่นำมาเฉลี่ย
+- **พื้นที่ให้เช่า** = พื้นที่ให้เช่าของสำนักงานตามที่แหล่งเผยแพร่ บอกว่าใครเผยแพร่ (ตามเจ้าของ · ตามนายหน้า · ตามข่าวประชาสัมพันธ์) วันที่ของตัวเลข (“ข้อมูล ณ …”, ไตรมาส, ปีบัญชี, “เผยแพร่ …” เมื่อแหล่งบอกแค่วันเผยแพร่ หรือ “ไม่ระบุวันที่ของตัวเลข”) และวันที่ตรวจหน้าแหล่ง ขอบเขตของตัวเลขอยู่ใต้ “ขอบเขตตามแหล่ง” ตามถ้อยคำของแหล่ง บางรายการรวมพื้นที่ค้าปลีกหรือทั้งโครงการ แสดงรายสำนักงาน ไม่นำมาบวก เทียบ หรือหาค่าเฉลี่ย
+- **อัตราการเช่า** = ตัวเลขที่เจ้าของรายงาน (เช่น รายงานประจำปีของกองทรัสต์) พร้อมวันที่ของตัวเลขแบบเดียวกับพื้นที่ให้เช่าและขอบเขตใต้ “ขอบเขตตามแหล่ง” (บางรายการเป็นทั้งพอร์ต ไม่ใช่เฉพาะสำนักงาน) แสดงรายสำนักงาน ไม่นำมาเฉลี่ย
 - **สัดส่วนของจังหวัด** = สำนักงานในพื้นที่ ÷ สำนักงานทั้งจังหวัดในตัวกรอง รวมรายการที่ระบุได้แค่จังหวัด ซึ่งนับในยอดจังหวัดแต่ไม่อยู่ในสีของเขต/อำเภอใด
 - **ใกล้รถไฟฟ้า** = ห่างจุดอ้างอิงของสถานีที่เปิดแล้วไม่เกิน 500 ม. เป็นระยะตรง ไม่ใช่ระยะเดินหรือเวลาเดินทาง นับเฉพาะสำนักงานที่มีพิกัด (ตัวตั้งและตัวหารอยู่ในคำอธิบายของแต่ละแท่ง) ค่าเช่ากลาง “≤ 500 ม.” กับ “ไกลกว่า” เทียบราคาที่ประกาศสองกลุ่มในจังหวัดเดียวกัน เป็นสิ่งที่วัดได้ในชุดข้อมูล ไม่ได้พิสูจน์ว่ารถไฟฟ้าทำให้ค่าเช่าสูงขึ้น
 - **ค่าเช่ารอบ ๆ** = สำนักงานที่มีค่าเช่าที่ประกาศในระยะตรง 1 กม. เรียงใกล้ก่อน (ไม่เกิน 8 แห่ง) พร้อมจำนวนสำนักงานในรัศมีเดียวกันและค่ากลางของราคาที่มีเดือนกำกับ (เมื่อมีอย่างน้อย 5 ราคา) เป็นรายชื่อเริ่มต้นสำหรับเทียบ ไม่ใช่การประเมินมูลค่า
@@ -73,6 +74,21 @@ and thelist.group (1). Every median therefore reads, in practice, one broker sit
 
 Snapshot (no filter): offices 608 · dated rents 256, median ฿600 · Bangkok 429 offices, 250 dated rents, median ฿610 ·
 districts with offices 128 · districts with a median 14 (all in Bangkok but one: บางพลี, Samut Prakan, ฿550 from 5).
+
+**Leasable area and occupancy (per office only; never summed, compared or averaged)** — `office_leasable_area_sqm` of
+`28_OFFICE_METRICS` (75 offices, 73 of them in Bangkok) with who published it, read from `office_leasable_area_basis`
+(`scripts/build-data.py#lease_by`): the owner, operator, issuer or fund (66) · a broker's listing or market report (8,
+`broker_*`, added on 2026-11-20) · a press release whose issuer is unclear (1, `press_release_*`); and `occupancy_rate`
+(18 offices) as the owner reports it. Each figure keeps the date it refers to, read from its reference text
+(`ref_when`; for occupancy `occupancy_as_of_date`, then the period columns, come first) — leasable area: a day (17), a
+fiscal year (9), a quarter (3), a period (2), the publication of a figure whose own date is not stated (3), no date
+(41, mostly undated owner and broker pages); occupancy: a day (11), a month (2), a period (5) — and the day its page was
+checked when the reference says so. The panel words them (“ข้อมูล ณ 31 ธ.ค. 2568”, “ไตรมาส 4/2566”, “ปีบัญชี 2568”,
+“ทั้งปี 2568”, “เผยแพร่ 21 มิ.ย. 2565”, “ไม่ระบุวันที่ของตัวเลข”, then “ตรวจ 20 พ.ย. 2569”) instead of the sheet's
+reference text cut at 60 characters (before release 0.5.5), and folds the scope, in the source's own words, under
+“ขอบเขตตามแหล่ง”. A scope can be more than the office part (an office tower with retail, a two-tower complex, a campus
+at full completion). The dataset's check date in the provenance line (`meta.checkedOn`) is the latest of the sheet's
+`checked_on`, `owner_metrics_checked_on` and these check days.
 
 ## 3. District membership (build time, never re-assigned on screen)
 
@@ -140,7 +156,19 @@ data © OpenStreetMap contributors (ODbL).
   CityMETER production.
 - Some companies appear as two organisations (Thai and English names); merging them is the sheet's call.
 - An organisation name in `18_ORGANIZATIONS` reads like an office (“Haadyai Nakarin office at ASEAN City Resort C.3”).
-- 16 floor counts and 37 areas carry `source_scope_or_value_conflict`.
+- 16 floor counts and 40 areas carry `source_scope_or_value_conflict`; three were set on 2026-11-20 — Sathorn Thani 1
+  and 2 (OFF-27E6F05D17C8, OFF-2EC4F549C0B7) each carried 41,000 m², the two buildings together, and Shinawatra Tower II
+  (OFF-F4D73C660219) carried 49,838 m², the figure of Phahol 8.
+- The leasable-area check of 2026-11-20 (the 100 offices with the largest `area_sqm`) left these for the sheet's owner:
+  Chamnan Phenjati Business Centre (OFF-AA576E92706E) carries 52,300 m², the lettable area a broker shows for Bangna
+  Tower; Central Tower@Central World (OFF-AF2F445B6671) carries 80,000 m², which reads like the office space of The
+  Offices at CentralWorld; Kasemkij Building (OFF-FD06D6E9E205, already marked as a conflict) carries Column Tower's
+  34,270 m²; Chamchuri Square
+  (OFF-BBDB330EB81B) carries 89,029 m², its tower GFA; Muang Thai Phatra Complex (OFF-97187C2CAFD1) carries 36,738 m²
+  while the 70,200 m² leasable area published here covers both towers; Ample Tower, Empire Tower, U M Tower and Suan
+  Lum Night Bazaar have sources that disagree or measure something else. The 14 leasable areas of that day keep the
+  `owner_metrics_status` and `owner_metrics_checked_on` of the earlier owner-metrics pass; updating those is the
+  sheet's call.
 - Rent sources: 255 of the 256 dated rents come from one broker site; a second listing source (or the owners' own
   pages) would show whether the medians hold beyond that site.
 - Dated rents outside Bangkok and Samut Prakan: 1 (Nonthaburi). The regional C.P. Tower rents (Hat Yai, Nakhon
