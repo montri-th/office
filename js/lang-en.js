@@ -97,6 +97,11 @@ export default {
     'อาคารที่เปิด': 'Selected building',
     'อาคารที่เปิดดูอยู่': 'Building being viewed',
     'ขอบอาคาร OpenStreetMap': 'OpenStreetMap outline',
+    'ขอบอาคาร CityMETER Building V4': 'CityMETER Building V4 outline',
+    'ขอบอาคาร CityMETER Building V4 และ OpenStreetMap': 'CityMETER Building V4 and OpenStreetMap outlines',
+    // The map credit of the shared building units (js/shell/building-units.js CM_ATTRIBUTION) after the basemap's credits
+    '| อาคาร:': '| Buildings:',
+    'อาคาร:': 'Buildings:',
     'อาคารของสำนักงาน': "The office's building",
     'ภูมิประเทศ ×1.5': 'Terrain ×1.5',
     'ภูมิประเทศ 3 มิติ ขยายความสูง 1.5 เท่า': '3D terrain, heights exaggerated 1.5 times',

@@ -94,3 +94,44 @@ evidence, keeping the 1 Nov result as history. Read back from the sheet's CSV ex
 and by opening each note; Sheets showed “Saved to Drive”. No validation, protected range, row or column was touched.
 The file also runs its own sync every 60 minutes (`R08_SYNC_STATUS`); the demo columns filled on 1 Nov for other rows
 are still in place after many runs.
+
+## 6. Releases 0.5.5 and 0.5.6 (2026-11-21, Asia/Bangkok)
+
+Owner request (2026-11-20 23:27, VERBATIM): “ลุยครับ ถ้าได้ผลดี run ให้จบทั้งหมดไปเลยนะ แล้วปรับ demo office ให้เรียบร้อยด้วย
+https://citymeter.pages.dev/office/?d=office&at=BKK” and “นำผลลัพท์ใหม่ไปปรับทั้ง shopping center และ office demo web”.
+
+- Research master: the leasable-area check of 2026-11-20 wrote 76 cells of `28_OFFICE_METRICS`. These are 14 rows of AC:AG
+  (leasable area, basis, scope, reference, public source link) plus H and Z of three rows (area status
+  `source_scope_or_value_conflict` and a dated note). Read back from the sheet's CSV against the snapshot taken before the
+  write: only those cells changed.
+- Inputs: the six tabs exported on 2026-11-21 (SHA-256 and rows in `meta.inputs`; `28_OFFICE_METRICS` `dd1b97d5…`, 612
+  rows), kept out of the repository.
+- Build: `python3 -I scripts/build-data.py --csv <tabs> --read-on 2026-11-21 --index data/area-index.json --frames
+  data/frames --transit <montri-th/transit @5f5232d> --out .` → `data/offices.json` SHA-256
+  `4d225abba080832c99f5952decae6843cdaea1b1b490d7e39a7ac942728e6a77`.
+- Compared with 0.5.4, everything published is equal except:
+  - leasable area: 75 offices (61 before), each with its publisher, date token, check day and scope;
+  - occupancy: date tokens;
+  - three area statuses;
+  - link indexes. The links they resolve to are identical.
+- Tests: `npm test` 168 / 168 (0.5.5) and 169 / 169 (0.5.6).
+- Local render: python Playwright with the system Chrome, tiles blocked.
+  - Five offices in Thai and English at 1,280 px, and at 393 px with the full sheet: no text leaves its box, each scope
+    summary is 44 px, captions are 12 px.
+  - English harvest over 6 views, 40 offices and 3 stations: nothing left untranslated after the entries of 0.5.5.
+- 0.5.5 preview: citymeter-pages-deploy run 44783205747, override `office` = `bdbee0d`, success.
+- 0.5.5 production:
+  - pull request #19 merged as `8e8d8be` at 17:29 UTC;
+  - GitHub Pages deployment 7948214186 succeeded at 17:29:53 UTC;
+  - publish run 44786004044 (17:43–17:44 UTC): 114 / 114 live checks, demo family check passed on the site and live;
+  - `npm run verify:live`: 254 / 254 files match on https://montri-th.github.io/office/ (manifest 290 files, commit
+    `8e8d8be`).
+- Live in the owner's Chrome on citymeter.pages.dev (cache tag `20261121-r1`):
+  - `?d=office&at=BKK`: provenance “ตรวจ 20 พ.ย. 2569”; first finding unchanged (47%, 202 of 429).
+  - Mitrtown Office Tower in English: “Leasable area = 46,355 m² · per the owner · as of 30 Jun 2026” and “Occupancy =
+    97% · for Apr–Jun 2026”.
+  - Muang Thai Phatra Complex in English: “70,200 m² · per a press release · published in 2012 · checked 20 Nov 2026”.
+  - Mitrtown in a 393 × 740 frame (dark, full sheet): rows inside their boxes; scope summaries 44 px.
+- The live English harvest, with the map's tiles loaded, found two strings no local harvest showed: the building
+  legend title “อาคารที่เปิดดูอยู่ · ขอบอาคาร CityMETER Building V4 และ OpenStreetMap” and the building credit “| อาคาร:”.
+  Release 0.5.6 (cache tag `20261121-r2`) adds them to `js/lang-en.js`, with a test.
