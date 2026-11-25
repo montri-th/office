@@ -22,6 +22,7 @@ import {productionLink, provinceByCode, hasPoint, stationLink, SIZE_BANDS, subNa
 import {areaWord} from './areas.js';
 import {cueMarkup} from './cues.js';
 import {actionBar} from './ask.js';
+import {officeLogoMarkup} from './office-logos.js';
 
 const NUMBER = new Intl.NumberFormat('th-TH', {maximumFractionDigits: 0});
 export const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
@@ -206,7 +207,7 @@ function rowMeta(r, {showArea = false, index = null, distance = null} = {}) {
 
 /** Offices: cue (category) + name, then floors · rent · organisation · where · distance. */
 export function officeList(rows, opts = {}) {
-  return `<ul class="outlet-list">${rows.map(r => `<li><button type="button" class="brand-row" data-action="select-office" data-id="${esc(r.id)}">${cueMarkup(r.series, {className: 'row-cue'})}<span class="row-text"><strong>${esc(r.name || 'ไม่มีชื่อ')}</strong>${subLine(r, 'row-branch', 'span')}<span class="row-meta">${esc(rowMeta(r, opts))}</span></span></button></li>`).join('')}</ul>`;
+  return `<ul class="outlet-list">${rows.map(r => `<li><button type="button" class="brand-row" data-action="select-office" data-id="${esc(r.id)}">${cueMarkup(r.series, {className: 'row-cue'})}<span class="row-text"><strong>${esc(r.name || 'ไม่มีชื่อ')}</strong>${subLine(r, 'row-branch', 'span')}<span class="row-meta">${esc(rowMeta(r, opts))}</span></span>${officeLogoMarkup(r.id, {row: true})}</button></li>`).join('')}</ul>`;
 }
 
 /** "ดูทั้งหมด 193 แห่ง" under a shortened list. */
@@ -436,7 +437,7 @@ function selectionNote(p, place, ctx) {
 function rentList(rows, limit = 8) {
   if (!rows.length) return '';
   const shown = rows.slice(0, limit);
-  return `<ul class="outlet-list rent-list">${shown.map(r => `<li><button type="button" class="brand-row" data-action="select-office" data-id="${esc(r.id)}">${cueMarkup(r.series, {className: 'row-cue'})}<span class="row-text"><strong>${esc(r.name)}</strong><span class="row-meta">${esc([`${rentText(r.rent)} /ตร.ม./เดือน`, r.rent.on ? thaiDate(r.rent.on) : 'ไม่ระบุเดือน', floorsText(r)].filter(Boolean).join(' · '))}</span></span></button></li>`).join('')}</ul>${rows.length > limit ? `<p class="hint">อีก ${num(rows.length - limit)} ราคาในรายชื่อ</p>` : ''}`;
+  return `<ul class="outlet-list rent-list">${shown.map(r => `<li><button type="button" class="brand-row" data-action="select-office" data-id="${esc(r.id)}">${cueMarkup(r.series, {className: 'row-cue'})}<span class="row-text"><strong>${esc(r.name)}</strong><span class="row-meta">${esc([`${rentText(r.rent)} /ตร.ม./เดือน`, r.rent.on ? thaiDate(r.rent.on) : 'ไม่ระบุเดือน', floorsText(r)].filter(Boolean).join(' · '))}</span></span>${officeLogoMarkup(r.id, {row: true})}</button></li>`).join('')}</ul>${rows.length > limit ? `<p class="hint">อีก ${num(rows.length - limit)} ราคาในรายชื่อ</p>` : ''}`;
 }
 
 /* ---------- District (เขต/อำเภอ) ---------- */
@@ -537,7 +538,7 @@ function compsetSection(c) {
   if (!c) return '';
   const rule = [`${pic('price')}มีค่าเช่าที่ประกาศ`, `${pic('distance')}≤ ${esc(meters(c.radius))}`].map(t => `<span class="rule-chip">${t}</span>`).join('');
   const list = c.rows.length
-    ? `<ul class="outlet-list compset">${c.rows.map(({row: r, m}) => `<li><button type="button" class="brand-row" data-action="select-office" data-id="${esc(r.id)}">${cueMarkup(r.series, {className: 'row-cue'})}<span class="row-text"><strong>${esc(r.name)}</strong><span class="row-meta">${esc([meters(m), `${rentText(r.rent)} /ตร.ม./เดือน`, r.rent.on ? thaiDate(r.rent.on) : '', floorsText(r)].filter(Boolean).join(' · '))}</span></span></button></li>`).join('')}</ul>`
+    ? `<ul class="outlet-list compset">${c.rows.map(({row: r, m}) => `<li><button type="button" class="brand-row" data-action="select-office" data-id="${esc(r.id)}">${cueMarkup(r.series, {className: 'row-cue'})}<span class="row-text"><strong>${esc(r.name)}</strong><span class="row-meta">${esc([meters(m), `${rentText(r.rent)} /ตร.ม./เดือน`, r.rent.on ? thaiDate(r.rent.on) : '', floorsText(r)].filter(Boolean).join(' · '))}</span></span>${officeLogoMarkup(r.id, {row: true})}</button></li>`).join('')}</ul>`
     : '<p class="hint">ไม่พบค่าเช่าที่ประกาศในรัศมีนี้</p>';
   const around = c.around.rent.n >= RENT_MIN_N ? ` · ค่ากลาง ${nw(`<strong class="data-number">${baht(Math.round(c.around.rent.median))}</strong>`)} (${nw(`${num(c.around.rent.n)} ราคา`)})` : '';
   return `<section class="panel-section"><div class="section-heading">${heading('compare', 'ค่าเช่ารอบ ๆ')}<span class="hint">${num(c.matches)} แห่ง</span></div>
@@ -575,7 +576,7 @@ export function renderOffice(d, ctx = {}) {
       <div class="identity"><span class="identity-cue">${cueMarkup(r.series)}</span><div>
         <p class="eyebrow eyebrow-cue">${esc(d.group?.th || '')}${r.model && r.model !== d.group?.th ? ` · ${esc(r.model)}` : ''}</p>
         <h2>${esc(r.name || 'ไม่มีชื่อ')}</h2>
-        ${subLine(r, 'branch-name', 'p')}</div></div>
+        ${subLine(r, 'branch-name', 'p')}</div>${officeLogoMarkup(r.id)}</div>
       <div class="fact-chips">${rentChip}${legacyChip}${floorsChip}${spaceChip}${occChip}${orgChipsHTML}${areaChip}${railChip}${nextChip}${buildingChip}${coords ? '' : '<span class="fact-chip is-quiet">ไม่มีพิกัด</span>'}</div>
       ${sameOrg}
       ${actionBar({kind: 'office', row: r, area: d.area ? {place: `${w.area}${d.area.name}`, province: prov} : r.province ? {place: '', province: prov} : null,

@@ -645,6 +645,12 @@ td small { display: block; color: var(--text-metadata); font-size: 12px; margin-
 .identity > div { min-width: 0; }
 .identity .eyebrow { margin-bottom: 2px; }
 .identity-pic { width: 46px; height: 46px; font-size: 42px; flex: 0 0 46px; }
+/* Building logos (0.6.0): each on its library plate (data/office-logos.json `plate`), the same on both themes; never recoloured. */
+.logo-plate { display: inline-flex; flex: none; align-items: center; justify-content: center; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border-hairline); line-height: 0; }
+.logo-plate img { display: block; width: auto; max-width: 112px; object-fit: contain; }
+.identity .head-logo { margin-left: auto; max-width: 132px; }
+.brand-row .row-logo { margin-left: auto; padding: 2px 5px; }
+.brand-row .row-logo img { max-width: 70px; }
 .branch-name { font-size: 15px; line-height: 1.45; color: var(--text-secondary); margin-top: 2px; overflow-wrap: anywhere; }
 /* The record's own name under the name the brand lists now (data.currentNames): a quiet word, then the name. */
 .title-link { font: inherit; color: inherit; padding: 0; min-height: 0; border: 0; background: none; text-align: left; white-space: normal; text-decoration: none; }
