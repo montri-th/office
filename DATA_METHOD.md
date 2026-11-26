@@ -185,3 +185,22 @@ npm test
 
 The build stops on any value it has no rule for (a new category, evidence status, role, rent basis, floor status or
 source version), so a sheet change is decided in the code, never guessed.
+
+## 11. Building logos (release 0.6.0, 2026-11-26)
+
+Owner 2026-11-26 06:14, VERBATIM: “เช็คหน่อยว่า โลโก้ขึ้นหรือยัง ใน web demo ทุกๆ dataset รวม transit ด้วย … แก้จุดที่แก้ง่ายก่อน ติดตรงไหนให้ข้ามก่อน”.
+
+- Source: the research team's office web logo library (checked 2026-11-09): 42 targeted offices, 38 collected, 4 not found. Its manifest and files stay outside this repository; `data/office-logos.json` keeps the manifest's SHA-256 (`meta.manifestSha256`), each file's public facts and its public source page — never the sheet's id, row links or evidence notes.
+- Join: a mapping is used when its result is `collected` and its role `venue_specific` (the building's own logo), by its Office ID (`entity_id` = `cols.key`), never by name; its file is found by the manifest's SHA-256. 38 offices of 608 have a logo; the other 570 read by their name.
+- Display (the family rule of Fitness and Hotel): SVG and rasters ≤ 512 px and ≤ 64 KB keep their bytes (21); a transparent canvas whose artwork fills under 60 %, or an opaque canvas whose border is near-white on a white plate, is trimmed to the artwork + 6 % (empty margin only); larger files are scaled uniformly to 384 px on the longest side as WebP (lossless with alpha); 17 files are derived this way and keep the original's SHA-256 in `original`. No recolouring, ink cropping, tracing or upscaling.
+- Plate: the library's recommended surface — dark → `#182327`, any other → `#FFFFFF` — the same on both themes; checked by eye on a contact sheet of all 38 (2026-11-26). Park Ventures Ecoplex and FYI Center are wordmarks set small inside a wide canvas: readable, but a tighter file from the owner's site would read better (proposed to the research team in the logo coverage proposals of 2026-11-26).
+- Where: beside the office's name in its card (32 px) and at the end of every office row — the list, the asking rents and the comparison set (20 px). Decorative (`alt=""`): the name beside it is the identity. The file is optional (`PARTIAL`, “โลโก้อาคาร”): without it every office reads by its name.
+- Rights: the marks belong to their owners; showing one to identify a building is not a trademark licence.
+
+Rebuild:
+
+```sh
+python3 -I scripts/add-office-logos.py --manifest <office web logo library manifest.json> --assets <its assets folder> --checked-on YYYY-MM-DD
+node --test tests/office-logos.test.js
+```
+

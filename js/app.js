@@ -58,6 +58,7 @@ import {installProvinceLayers, buildProvinceModel, PROVINCE_FILL_MAX_ZOOM, PROVI
 import {createFrameStore, provinceLocator} from './frames.js';
 import {buildOverview, buildAreaProfile, buildOfficeDetail, buildBuildingProfile, buildOrgProfile, buildStationProfile, stationsOf, listOrder, STATION_RADIUS_M} from './profile-model.js';
 import {renderOverview, renderArea, renderBuilding, renderOffice, renderStation, renderOrgCard, renderFilterChips, subLine, esc, num, pct, words, meters, priceText, rentText} from './panel.js';
+import {decodeOfficeLogos, setOfficeLogos} from './office-logos.js';
 import {installStationLayer} from './stations.js';
 import {joinBuildings, nearestBuilding} from './shell/building-join.js';
 import {buildMapStyle, basemapPalette, TILEJSON_URL, MASSING_BEFORE, VENUE_XRAY_BEFORE} from './shell/map-style.js';
@@ -1980,6 +1981,7 @@ const PARTIAL = {
   'data/provinces.geojson': ['กรอบจังหวัด', 'แผนที่ไม่แสดงขอบจังหวัด', 'Province outlines', 'The map shows no province outlines'],
   'frames': ['เส้นขอบเขต/อำเภอ', 'บางจังหวัดไม่แสดงเส้นขอบเขต/อำเภอบนแผนที่', 'District outlines', 'Some provinces show no district outlines on the map'],
   'units': ['รูปอาคารของ CityMETER', 'อาคารบางจังหวัดแสดงจากแผนที่ฐานแทนชุดอาคารของ CityMETER', 'CityMETER building shapes', 'Buildings in some provinces come from the basemap instead of the CityMETER set'],
+  'data/office-logos.json': ['โลโก้อาคาร', 'สำนักงานแสดงด้วยชื่ออย่างเดียว ไม่มีโลโก้', 'Building logos', 'Offices are shown by name only, without logos'],
   'basemap': ['แผนที่ฐาน', 'ถนน แหล่งน้ำ และอาคารพื้นหลังอาจไม่แสดง ข้อมูลในแผงและตารางยังใช้ได้', 'Basemap', 'Roads, water and background buildings may be missing; the panel and the table still work'],
 };
 function partial(key) {
@@ -1990,11 +1992,14 @@ function partial(key) {
 
 async function init() {
   try {
-    const [rowsJSON, indexJSON, provincesJSON] = await Promise.all([
+    const [rowsJSON, indexJSON, provincesJSON, logosJSON] = await Promise.all([
       fetchJSON('data/offices.json', {timeout: 30000}),
       fetchJSON('data/area-index.json', {timeout: 30000}),
       fetchJSON('data/provinces.geojson', {timeout: 30000}).catch(e => { partial('data/provinces.geojson'); console.warn('Province frames unavailable', e); return null; }),
+      // Building logos (0.6.0): optional; without them every office reads by its name alone.
+      fetchJSON('data/office-logos.json', {timeout: 30000}).catch(e => { partial('data/office-logos.json'); console.warn('Building logos unavailable', e); return null; }),
     ]);
+    setOfficeLogos(decodeOfficeLogos(logosJSON));
     if (!Array.isArray(indexJSON?.provinces) || !indexJSON.provinces.length || !Array.isArray(indexJSON?.areas?.id)) {
       const e = new Error('Invalid area index'); e.resource = 'data/area-index.json'; e.phase = 'data-schema'; throw e;
     }
