@@ -144,3 +144,15 @@ https://citymeter.pages.dev/office/?d=office&at=BKK” and “นำผลลั
   - `?at=BKK/D/1007&m=rent` and WHA Tower leave nothing untranslated (`__citymeterI18n.missing` empty);
   - the building legend reads “Building being viewed · OpenStreetMap outline”;
   - WHA Tower reads “52,000 m² · per the owner · published 21 Jun 2022”.
+
+## 7. Release 0.6.0 (2026-11-26, Asia/Bangkok)
+
+- Owner 2026-11-26 06:14, VERBATIM: “เช็คหน่อยว่า โลโก้ขึ้นหรือยัง ใน web demo ทุกๆ dataset รวม transit ด้วย … แก้จุดที่แก้ง่ายก่อน ติดตรงไหนให้ข้ามก่อน”; on merging and publishing (answered before the merges at 08:45): “Merge และ publish ทั้งสาม (Recommended)”.
+- Building logos (`DATA_METHOD.md` §11): 38 of 608 offices, from the research team's office logo library (38 collected of 42 targeted; files found by SHA-256; 21 kept, 17 trimmed or scaled to 384 px WebP); `npm test` 173 / 173. Locally at 1280 px and 393 px, light and dark, Thai and English; with `data/office-logos.json` blocked the page says “โลโก้อาคาร” is missing and draws no empty plate.
+- 0.6.0 production:
+  - pull request #22 merged as `0cb883c`; GitHub Pages deployment of `0cb883c` succeeded;
+  - publish run 45738071278 assembled the site at 01:47:33 UTC (`/release.json`: office `0cb883c` 0.6.0 `20261126-r1`);
+  - `npm run verify:live`: 294 / 294 files match (manifest 332 files, commit `0cb883c`).
+- On citymeter.pages.dev in the owner's Chrome, 26 พ.ย. 2569 08:49–08:52: Park Silom's card shows its logo on the dark plate beside the name (cache tag `20261126-r1`, image loaded); The Unicorn in English (`lang=en`) shows its logo, image loaded.
+- Not verified: 393 px on the live site (checked locally before release), a real phone, browsers other than Chrome.
+
